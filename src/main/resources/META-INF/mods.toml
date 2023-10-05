@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="MIT License"
+
+[[mods]]
+modId="letfishlove"
+version="${file.jarVersion}" #mandatory
+displayName="Example Mod" #mandatory
+credits="Assets and Idea by toomanykitkats" #optional
+authors="Uraneptus" #optional
+description='''
+'''
+[[dependencies.letfishlove]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.letfishlove]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
