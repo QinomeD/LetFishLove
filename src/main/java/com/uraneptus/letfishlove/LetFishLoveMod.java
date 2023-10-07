@@ -1,27 +1,22 @@
 package com.uraneptus.letfishlove;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
+import com.uraneptus.letfishlove.core.registry.LFLBlocks;
+import com.uraneptus.letfishlove.core.registry.LFLItems;
+import com.uraneptus.letfishlove.data.client.LFLBlockStateProvider;
+import com.uraneptus.letfishlove.data.client.LFLItemModelProvider;
+import com.uraneptus.letfishlove.data.client.LFLLangProvider;
+import com.uraneptus.letfishlove.data.server.LFLLootTableProvider;
+import com.uraneptus.letfishlove.data.server.tags.LFLBlockTagsProvider;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 @Mod(LetFishLoveMod.MOD_ID)
@@ -35,9 +30,37 @@ public class LetFishLoveMod {
 
     public LetFishLoveMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::gatherData);
+
+        LFLBlocks.BLOCKS.register(bus);
+        LFLItems.ITEMS.register(bus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @SubscribeEvent
+    public void gatherData(GatherDataEvent event) {
+        boolean includeClient = event.includeClient();
+        boolean includeServer = event.includeServer();
+        DataGenerator generator = event.getGenerator();
+        ExistingFileHelper fileHelper = event.getExistingFileHelper();
+
+        generator.addProvider(includeClient, new LFLBlockStateProvider(generator, fileHelper));
+        generator.addProvider(includeClient, new LFLItemModelProvider(generator, fileHelper));
+        generator.addProvider(includeClient, new LFLLangProvider(generator));
+
+        LFLBlockTagsProvider blockTagsProvider = new LFLBlockTagsProvider(generator, fileHelper);
+        generator.addProvider(includeServer, blockTagsProvider);
+        generator.addProvider(includeServer, new LFLLootTableProvider(generator));
+
+        /*
+        SeasonalsBlockTagsProvider blockTagsProvider = new SeasonalsBlockTagsProvider(generator, fileHelper);
+        generator.addProvider(includeServer, blockTagsProvider);
+        generator.addProvider(includeServer, new SeasonalsItemTagsProvider(generator, blockTagsProvider, fileHelper));
+        generator.addProvider(includeServer, new SeasonalsAdvancementModifierProvider(generator));
+        generator.addProvider(includeServer, new SeasonalsLootModifierProvider(generator));
+        generator.addProvider(includeServer, new SeasonalsRecipeProvider(generator));
+         */
+    }
 
 }
