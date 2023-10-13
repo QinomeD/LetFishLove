@@ -8,6 +8,7 @@ import com.uraneptus.letfishlove.data.client.LFLItemModelProvider;
 import com.uraneptus.letfishlove.data.client.LFLLangProvider;
 import com.uraneptus.letfishlove.data.server.LFLLootTableProvider;
 import com.uraneptus.letfishlove.data.server.tags.LFLBlockTagsProvider;
+import com.uraneptus.letfishlove.data.server.tags.LFLItemTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,6 +52,7 @@ public class LetFishLoveMod {
 
         LFLBlockTagsProvider blockTagsProvider = new LFLBlockTagsProvider(generator, fileHelper);
         generator.addProvider(includeServer, blockTagsProvider);
+        generator.addProvider(includeServer, new LFLItemTagsProvider(generator, blockTagsProvider, fileHelper));
         generator.addProvider(includeServer, new LFLLootTableProvider(generator));
 
         /*
