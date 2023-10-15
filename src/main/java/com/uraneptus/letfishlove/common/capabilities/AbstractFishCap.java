@@ -47,28 +47,6 @@ public class AbstractFishCap implements INBTSerializable<CompoundTag> {
         this.loveCause = nbt.hasUUID("LoveCause") ? nbt.getUUID("LoveCause") : null;
     }
 
-    public boolean isInLove() {
-        return this.inLove > 0;
-    }
-
-    public boolean canFallInLove() {
-        return this.inLove <= 0;
-    }
-
-    public void resetLove() {
-        this.inLove = 0;
-    }
-
-    @Nullable
-    public ServerPlayer getLoveCause(Level level) {
-        if (this.loveCause == null) {
-            return null;
-        } else {
-            Player player = level.getPlayerByUUID(this.loveCause);
-            return player instanceof ServerPlayer ? (ServerPlayer)player : null;
-        }
-    }
-
     public static LazyOptional<AbstractFishCap> getCapOptional(LivingEntity entity) {
         return entity.getCapability(ENTITY_CAPABILITY);
     }
