@@ -33,7 +33,7 @@ public class AbstractFishCap implements INBTSerializable<CompoundTag> {
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 
-        tag.putInt("inLove", inLove);
+        tag.putInt("inLove",this.inLove);
         if (this.loveCause != null) {
             tag.putUUID("LoveCause", this.loveCause);
         }
@@ -43,7 +43,7 @@ public class AbstractFishCap implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        inLove = nbt.getInt("inLove");
+        this.inLove = nbt.getInt("inLove");
         this.loveCause = nbt.hasUUID("LoveCause") ? nbt.getUUID("LoveCause") : null;
     }
 

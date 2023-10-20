@@ -49,6 +49,7 @@ public class FishBreedingUtil {
         return canFallInLove;
     }
 
+    //TODO it seems like love is not reseted on both logical sides. Big problem
     public static void resetLove(AbstractFish fish) {
         AbstractFishCap.getCapOptional(fish).ifPresent(cap -> {
             cap.inLove = 0;
@@ -80,7 +81,6 @@ public class FishBreedingUtil {
         });
     }
 
-    //TODO this crashes the game atm
     public static boolean canMate(AbstractFish thisFish, AbstractFish pOtherFish) {
         if (pOtherFish == thisFish) {
             return false;
@@ -93,7 +93,6 @@ public class FishBreedingUtil {
 
     //TODO this will later handle laying roe etc. It's currently just
     public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish fish, AbstractFish otherFish) {
-        //AbstractFish ageablemob = this.getBreedOffspring(pLevel, pMate);
         AbstractFish newFish = (AbstractFish) fish.getType().create(pLevel);
 
         if (newFish != null) {
@@ -109,6 +108,7 @@ public class FishBreedingUtil {
             resetLove(fish);
             resetLove(otherFish);
             newFish.moveTo(fish.getX(), fish.getY(), fish.getZ(), 0.0F, 0.0F);
+            //TODO tropical fish will only spawn one type atm
             pLevel.addFreshEntity(newFish);
             pLevel.broadcastEntityEvent(fish, (byte)18);
             if (pLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {

@@ -65,16 +65,16 @@ public class FishBreedGoal extends Goal {
     private AbstractFish getFreePartner() {
         List<? extends AbstractFish> list = this.level.getNearbyEntities(this.partnerClass, PARTNER_TARGETING, this.fish, this.fish.getBoundingBox().inflate(8.0D));
         double d0 = Double.MAX_VALUE;
-        AbstractFish fish = null;
+        AbstractFish partner = null;
 
         for(AbstractFish otherFish : list) {
-            if (FishBreedingUtil.canMate(fish, otherFish) && this.fish.distanceToSqr(otherFish) < d0) {
-                fish = otherFish;
+            if (FishBreedingUtil.canMate(this.fish, otherFish) && this.fish.distanceToSqr(otherFish) < d0) {
+                partner = otherFish;
                 d0 = this.fish.distanceToSqr(otherFish);
             }
         }
 
-        return fish;
+        return partner;
     }
 
     protected void breed() {

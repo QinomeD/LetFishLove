@@ -43,9 +43,8 @@ public class EntityEvents {
                 if (FishBreedingUtil.canFallInLove(fish)) {
                     event.setCancellationResult(InteractionResult.SUCCESS);
                     event.setCanceled(true);
+                    FishBreedingUtil.setInLove(player, level, fish);
                 }
-                FishBreedingUtil.setInLove(player, level, fish);
-
             }
         }
     }
@@ -56,7 +55,10 @@ public class EntityEvents {
         if (entity instanceof AbstractFish fish) {
             Level level = fish.getLevel();
             System.out.println(FishBreedingUtil.isInLove(fish));
-            System.out.println(FishBreedingUtil.getLoveCause(level, fish));
+            if (entity.getLevel().isClientSide) {
+                System.out.println(FishBreedingUtil.isInLove(fish));
+                System.out.println(FishBreedingUtil.getLoveCause(level, fish));
+            }
         }
     }
 
