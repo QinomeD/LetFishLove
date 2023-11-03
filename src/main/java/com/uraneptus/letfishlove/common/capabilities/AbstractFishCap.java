@@ -20,9 +20,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class AbstractFishCap implements INBTSerializable<CompoundTag> {
-
     public static Capability<AbstractFishCap> ENTITY_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
-
     public int inLove;
     @Nullable
     public UUID loveCause;

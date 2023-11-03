@@ -58,6 +58,7 @@ public class FishBreedGoal extends Goal {
         ++this.loveTime;
         if (this.loveTime >= this.adjustedTickDelay(60) && this.fish.distanceToSqr(this.partner) < 9.0D) {
             this.breed();
+            FishBreedingUtil.breed = true;
         }
     }
 
