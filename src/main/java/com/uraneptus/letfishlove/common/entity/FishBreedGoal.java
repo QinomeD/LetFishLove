@@ -1,12 +1,14 @@
 package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
+import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -35,7 +37,10 @@ public class FishBreedGoal extends Goal {
     }
 
     public boolean canUse() {
-        if (!FishBreedingUtil.isInLove(this.fish)) {
+        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
+        if (!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) {
+            return false;
+        } else if (!thisFishOptional.resolve().get().isInLove()) {
             return false;
         } else {
             this.partner = this.getFreePartner();
@@ -44,7 +49,8 @@ public class FishBreedGoal extends Goal {
     }
 
     public boolean canContinueToUse() {
-        return this.partner.isAlive() && FishBreedingUtil.isInLove(partner) && this.loveTime < 60;
+        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.partner).cast();
+        return this.partner.isAlive() && (otherFishOptional.isPresent() || !otherFishOptional.resolve().isEmpty()) && otherFishOptional.resolve().get().isInLove() && this.loveTime < 60;
     }
 
     public void stop() {
@@ -56,9 +62,9 @@ public class FishBreedGoal extends Goal {
         this.fish.getLookControl().setLookAt(this.partner, 10.0F, (float)this.fish.getMaxHeadXRot());
         this.fish.getNavigation().moveTo(this.partner, this.speedModifier);
         ++this.loveTime;
+        System.out.println(loveTime);
         if (this.loveTime >= this.adjustedTickDelay(60) && this.fish.distanceToSqr(this.partner) < 9.0D) {
             this.breed();
-            FishBreedingUtil.breed = true;
         }
     }
 

@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
-import com.uraneptus.letfishlove.common.network.FishInLoveS2CMessage;
+import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,47 +18,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nullable;
 
 public class FishBreedingUtil {
-    private static boolean isInLove = false;
-    private static boolean canFallInLove = false;
-    public static boolean breed = false;
-    @Nullable
-    private static ServerPlayer loveCause;
-
-    @Nullable
-    public static ServerPlayer getLoveCause(Level level, AbstractFish fish) {
-        AbstractFishCap.getCapOptional(fish).ifPresent(cap -> {
-            if (cap.loveCause == null) {
-                loveCause = null;
-            } else {
-                Player player = level.getPlayerByUUID(cap.loveCause);
-                loveCause = player instanceof ServerPlayer ? (ServerPlayer)player : null;
-            }
-        });
-        return loveCause;
-    }
-
-    public static boolean isInLove(AbstractFish fish) {
-        AbstractFishCap.getCapOptional(fish).ifPresent(cap -> {
-            isInLove = cap.inLove > 0;
-        });
-        return isInLove;
-    }
-
-    public static boolean canFallInLove(AbstractFish fish) {
-        AbstractFishCap.getCapOptional(fish).ifPresent(cap -> {
-            canFallInLove = cap.inLove <= 0;
-        });
-        return canFallInLove;
-    }
-
-    //TODO it seems like love is not reseted on both logical sides. Big problem
-    public static void resetLove(AbstractFish fish) {
-        AbstractFishCap.getCapOptional(fish).ifPresent(cap ->  {
-            if (!FishBreedingUtil.canFallInLove(fish)) {
-                cap.inLove = 0;
-            }
-        });
-    }
 
     public static void usePlayerItem(Player pPlayer, ItemStack pStack) {
         if (!pPlayer.getAbilities().instabuild) {
@@ -66,58 +25,52 @@ public class FishBreedingUtil {
         }
     }
 
-    public static void setInLove(@Nullable Player pPlayer, Level level, AbstractFish fish) {
-        AbstractFishCap.getCapOptional(fish).ifPresent(cap -> {
-            RandomSource random = fish.getRandom();
-            cap.inLove = 600;
-            if (pPlayer != null) {
-                cap.loveCause = pPlayer.getUUID();
-            }
-            level.broadcastEntityEvent(fish, (byte)18);
-            /*
-            for(int i = 0; i < 7; ++i) {
-                double d0 = random.nextGaussian() * 0.02D;
-                double d1 = random.nextGaussian() * 0.02D;
-                double d2 = random.nextGaussian() * 0.02D;
-                level.addParticle(ParticleTypes.HEART, fish.getRandomX(1.0D), fish.getRandomY() + 0.5D, fish.getRandomZ(1.0D), d0, d1, d2);
-            }
-
-             */
-        });
-    }
-
     public static boolean canMate(AbstractFish thisFish, AbstractFish pOtherFish) {
+        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
+        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(pOtherFish).cast();
+
+        if ((!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) && (!otherFishOptional.isPresent() || otherFishOptional.resolve().isEmpty())) {
+            return false;
+        }
         if (pOtherFish == thisFish) {
             return false;
         } else if (pOtherFish.getClass() != thisFish.getClass()) {
             return false;
         } else {
-            return isInLove(thisFish) && isInLove(pOtherFish);
+            AbstractFishCap thisFishCap = thisFishOptional.resolve().get();
+            AbstractFishCap otherFishCap = otherFishOptional.resolve().get();
+            return thisFishCap.isInLove() && otherFishCap.isInLove();
         }
     }
 
     //TODO this will later handle laying roe etc. It's currently just
-    public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish fish, AbstractFish otherFish) {
-        AbstractFish newFish = (AbstractFish) fish.getType().create(pLevel);
+    public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish thisFish, AbstractFish otherFish) {
+        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
+        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(otherFish).cast();
+        if ((!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) && (!otherFishOptional.isPresent() || otherFishOptional.resolve().isEmpty())) {
+            return;
+        }
+        AbstractFishCap thisFishCap = thisFishOptional.resolve().get();
+        AbstractFishCap otherFishCap = otherFishOptional.resolve().get();
+        AbstractFish newFish = (AbstractFish) thisFish.getType().create(pLevel);
 
         if (newFish != null) {
-            ServerPlayer serverplayer = getLoveCause(pLevel, fish);
-            if (serverplayer == null && getLoveCause(pLevel, otherFish) != null) {
-                serverplayer = getLoveCause(pLevel, otherFish);
+            ServerPlayer serverplayer = thisFishCap.getLoveCause(pLevel);
+            if (serverplayer == null && otherFishCap.getLoveCause(pLevel) != null) {
+                serverplayer = otherFishCap.getLoveCause(pLevel);
             }
 
             if (serverplayer != null) {
                 serverplayer.awardStat(Stats.ANIMALS_BRED);
             }
-
-
-            newFish.moveTo(fish.getX(), fish.getY(), fish.getZ(), 0.0F, 0.0F);
-            //TODO tropical fish will only spawn one type atm
+            thisFishCap.resetLove();
+            otherFishCap.resetLove();
+            newFish.moveTo(thisFish.getX(), thisFish.getY(), thisFish.getZ(), 0.0F, 0.0F);
+            //TODO randomize tropical fish look
             pLevel.addFreshEntity(newFish);
-            pLevel.broadcastEntityEvent(fish, (byte)18);
-            //pLevel.broadcastEntityEvent(otherFish, (byte)18);
+            pLevel.broadcastEntityEvent(thisFish, (byte)18);
             if (pLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                pLevel.addFreshEntity(new ExperienceOrb(pLevel, fish.getX(), fish.getY(), fish.getZ(), fish.getRandom().nextInt(7) + 1));
+                pLevel.addFreshEntity(new ExperienceOrb(pLevel, thisFish.getX(), thisFish.getY(), thisFish.getZ(), thisFish.getRandom().nextInt(7) + 1));
             }
         }
     }

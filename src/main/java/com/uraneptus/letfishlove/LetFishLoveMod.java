@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove;
 
 import com.mojang.logging.LogUtils;
-import com.uraneptus.letfishlove.common.network.FishInLoveS2CMessage;
+import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import com.uraneptus.letfishlove.core.registry.LFLItems;
 import com.uraneptus.letfishlove.data.client.LFLBlockStateProvider;
@@ -18,6 +18,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -28,12 +29,6 @@ import org.slf4j.Logger;
 public class LetFishLoveMod {
     public static final String MOD_ID = "letfishlove";
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(modPrefix("network"))
-            .networkProtocolVersion(() -> PROTOCOL_VERSION)
-            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-            .simpleChannel();
     public static ResourceLocation modPrefix(String path) {
         return new ResourceLocation(LetFishLoveMod.MOD_ID, path);
     }
@@ -41,17 +36,17 @@ public class LetFishLoveMod {
     public LetFishLoveMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::gatherData);
+        bus.addListener(this::setup);
 
         LFLBlocks.BLOCKS.register(bus);
         LFLItems.ITEMS.register(bus);
-        this.messageInit();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void messageInit() {
-        int id = 0;
-        CHANNEL.registerMessage(id, FishInLoveS2CMessage.class, FishInLoveS2CMessage::serialize, FishInLoveS2CMessage::deserialize, FishInLoveS2CMessage::handle);
+    private void setup(final FMLCommonSetupEvent event) {
+        AbstractFishCapAttacher.setupChannel();
+        AbstractFishCapAttacher.register();
     }
 
     @SubscribeEvent
