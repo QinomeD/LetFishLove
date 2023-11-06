@@ -44,6 +44,7 @@ public class FishBreedingUtil {
     }
 
     //TODO this will later handle laying roe etc. It's currently just
+    //TODO randomize tropical fish look
     public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish thisFish, AbstractFish otherFish) {
         LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
         LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(otherFish).cast();
@@ -52,26 +53,23 @@ public class FishBreedingUtil {
         }
         AbstractFishCap thisFishCap = thisFishOptional.resolve().get();
         AbstractFishCap otherFishCap = otherFishOptional.resolve().get();
-        AbstractFish newFish = (AbstractFish) thisFish.getType().create(pLevel);
 
-        if (newFish != null) {
-            ServerPlayer serverplayer = thisFishCap.getLoveCause(pLevel);
-            if (serverplayer == null && otherFishCap.getLoveCause(pLevel) != null) {
-                serverplayer = otherFishCap.getLoveCause(pLevel);
-            }
+        ServerPlayer serverplayer = thisFishCap.getLoveCause(pLevel);
+        if (serverplayer == null && otherFishCap.getLoveCause(pLevel) != null) {
+            serverplayer = otherFishCap.getLoveCause(pLevel);
+        }
 
-            if (serverplayer != null) {
-                serverplayer.awardStat(Stats.ANIMALS_BRED);
-            }
-            thisFishCap.resetLove();
-            otherFishCap.resetLove();
-            newFish.moveTo(thisFish.getX(), thisFish.getY(), thisFish.getZ(), 0.0F, 0.0F);
-            //TODO randomize tropical fish look
-            pLevel.addFreshEntity(newFish);
-            pLevel.broadcastEntityEvent(thisFish, (byte)18);
-            if (pLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                pLevel.addFreshEntity(new ExperienceOrb(pLevel, thisFish.getX(), thisFish.getY(), thisFish.getZ(), thisFish.getRandom().nextInt(7) + 1));
-            }
+        if (serverplayer != null) {
+            //Usually a trigger would be here
+            serverplayer.awardStat(Stats.ANIMALS_BRED);
+        }
+
+        thisFishCap.resetLove();
+        otherFishCap.resetLove();
+        thisFishCap.setPregnant(true, true);
+        pLevel.broadcastEntityEvent(thisFish, (byte)18);
+        if (pLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            pLevel.addFreshEntity(new ExperienceOrb(pLevel, thisFish.getX(), thisFish.getY(), thisFish.getZ(), thisFish.getRandom().nextInt(7) + 1));
         }
     }
 }

@@ -2,7 +2,9 @@ package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.AbstractFish;
@@ -50,7 +52,7 @@ public class FishBreedGoal extends Goal {
 
     public boolean canContinueToUse() {
         LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.partner).cast();
-        return this.partner.isAlive() && (otherFishOptional.isPresent() || !otherFishOptional.resolve().isEmpty()) && otherFishOptional.resolve().get().isInLove() && this.loveTime < 60;
+        return this.partner.isAlive() && (otherFishOptional.isPresent() || !otherFishOptional.resolve().isEmpty()) && otherFishOptional.resolve().get().isInLove() && this.loveTime < 100;
     }
 
     public void stop() {
@@ -59,11 +61,13 @@ public class FishBreedGoal extends Goal {
     }
 
     public void tick() {
+        if (partner == null) {
+            return;
+        }
         this.fish.getLookControl().setLookAt(this.partner, 10.0F, (float)this.fish.getMaxHeadXRot());
         this.fish.getNavigation().moveTo(this.partner, this.speedModifier);
         ++this.loveTime;
-        System.out.println(loveTime);
-        if (this.loveTime >= this.adjustedTickDelay(60) && this.fish.distanceToSqr(this.partner) < 9.0D) {
+        if (this.loveTime >= this.adjustedTickDelay(100) && this.fish.distanceToSqr(this.partner) < 9.0D) {
             this.breed();
         }
     }
@@ -85,6 +89,14 @@ public class FishBreedGoal extends Goal {
     }
 
     protected void breed() {
+        //No particles yet :C
+        RandomSource random = level.getRandom();
+        for(int i = 0; i < 2; ++i) {
+            double d0 = random.nextGaussian() * 0.02D;
+            double d1 = random.nextGaussian() * 0.02D;
+            double d2 = random.nextGaussian() * 0.02D;
+            level.addParticle(ParticleTypes.HEART, fish.getRandomX(1.0D), fish.getRandomY() + 0.5D, fish.getRandomZ(1.0D), d0, d1, d2);
+        }
         FishBreedingUtil.spawnFishFromBreeding((ServerLevel) this.level, this.fish, this.partner);
     }
 }

@@ -19,6 +19,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     public int inLove;
     @Nullable
     public UUID loveCause;
+    public boolean isPregnant;
 
     protected AbstractFishCap(AbstractFish entity) {
         super(entity);
@@ -84,6 +85,17 @@ public class AbstractFishCap extends LivingEntityCapability {
         this.setInLoveInt(0, true);
     }
 
+    public boolean isPregnant() {
+        return isPregnant;
+    }
+
+    public void setPregnant(boolean pregnant, boolean sync) {
+        isPregnant = pregnant;
+        if (sync) {
+            this.updateTracking();
+        }
+    }
+
     @Override
     public CompoundTag serializeNBT(boolean savingToDisk) {
         CompoundTag tag = new CompoundTag();
@@ -92,6 +104,7 @@ public class AbstractFishCap extends LivingEntityCapability {
         if (this.loveCause != null) {
             tag.putUUID("LoveCause", this.loveCause);
         }
+        tag.putBoolean("isPregnant", this.isPregnant);
 
         return tag;
     }
@@ -100,6 +113,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     public void deserializeNBT(CompoundTag nbt, boolean readingFromDisk) {
         this.inLove = nbt.getInt("inLove");
         this.loveCause = nbt.hasUUID("LoveCause") ? nbt.getUUID("LoveCause") : null;
+        this.isPregnant = nbt.getBoolean("isPregnant");
     }
 
     @Override
