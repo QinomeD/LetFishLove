@@ -5,6 +5,7 @@ import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import com.uraneptus.letfishlove.common.entity.FishBreedGoal;
 import com.uraneptus.letfishlove.common.entity.FishBreedingUtil;
+import com.uraneptus.letfishlove.common.entity.FishLayRoeGoal;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.TagKey;
@@ -68,7 +69,7 @@ public class EntityEvents {
             LazyOptional<AbstractFishCap> capO = AbstractFishCapAttacher.getAbstractFishCapability(fish).cast();
             if (capO.isPresent()) {
                 AbstractFishCap cap = capO.resolve().get();
-                System.out.println(cap.inLove);
+                System.out.println(cap.isPregnant);
             }
 
         }
@@ -82,6 +83,7 @@ public class EntityEvents {
             TagKey<Item> temptationItems = TagKey.create(Registry.ITEM_REGISTRY, LetFishLoveMod.modPrefix("fish_food/" + regName));
             fish.goalSelector.addGoal(2, new TemptGoal(fish, 1.2D, Ingredient.of(temptationItems), false));
             fish.goalSelector.addGoal(3, new FishBreedGoal(fish, 1.0D));
+            fish.goalSelector.addGoal(3, new FishLayRoeGoal(fish, 1.0D, 10));
         }
     }
 }

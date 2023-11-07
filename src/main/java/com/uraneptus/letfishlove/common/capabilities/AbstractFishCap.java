@@ -21,7 +21,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     public UUID loveCause;
     public boolean isPregnant;
 
-    protected AbstractFishCap(AbstractFish entity) {
+    public AbstractFishCap(AbstractFish entity) {
         super(entity);
     }
 
@@ -49,7 +49,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     }
 
     public boolean canFallInLove() {
-        return this.getInLoveInt() <= 0;
+        return this.getInLoveInt() <= 0 && !this.isPregnant();
     }
 
     public void setInLove(AbstractFish fish, @Nullable Player pPlayer, Level level) {

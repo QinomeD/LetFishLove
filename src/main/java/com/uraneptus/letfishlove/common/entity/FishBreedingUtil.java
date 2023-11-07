@@ -25,6 +25,14 @@ public class FishBreedingUtil {
         }
     }
 
+    public static AbstractFishCap getFishCap(AbstractFish fish) {
+        LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(fish).cast();
+        if (fishOptional.isPresent() || !fishOptional.resolve().isEmpty()) {
+            return fishOptional.resolve().get();
+        }
+        return new AbstractFishCap(fish);
+    }
+
     public static boolean canMate(AbstractFish thisFish, AbstractFish pOtherFish) {
         LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
         LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(pOtherFish).cast();
@@ -43,16 +51,13 @@ public class FishBreedingUtil {
         }
     }
 
+
+
     //TODO this will later handle laying roe etc. It's currently just
     //TODO randomize tropical fish look
     public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish thisFish, AbstractFish otherFish) {
-        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
-        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(otherFish).cast();
-        if ((!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) && (!otherFishOptional.isPresent() || otherFishOptional.resolve().isEmpty())) {
-            return;
-        }
-        AbstractFishCap thisFishCap = thisFishOptional.resolve().get();
-        AbstractFishCap otherFishCap = otherFishOptional.resolve().get();
+        AbstractFishCap thisFishCap = getFishCap(thisFish);
+        AbstractFishCap otherFishCap = getFishCap(otherFish);
 
         ServerPlayer serverplayer = thisFishCap.getLoveCause(pLevel);
         if (serverplayer == null && otherFishCap.getLoveCause(pLevel) != null) {

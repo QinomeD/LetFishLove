@@ -42,7 +42,7 @@ public class FishBreedGoal extends Goal {
         LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
         if (!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) {
             return false;
-        } else if (!thisFishOptional.resolve().get().isInLove()) {
+        } else if (!thisFishOptional.resolve().get().isInLove() || thisFishOptional.resolve().get().isPregnant()) {
             return false;
         } else {
             this.partner = this.getFreePartner();
@@ -89,14 +89,6 @@ public class FishBreedGoal extends Goal {
     }
 
     protected void breed() {
-        //No particles yet :C
-        RandomSource random = level.getRandom();
-        for(int i = 0; i < 2; ++i) {
-            double d0 = random.nextGaussian() * 0.02D;
-            double d1 = random.nextGaussian() * 0.02D;
-            double d2 = random.nextGaussian() * 0.02D;
-            level.addParticle(ParticleTypes.HEART, fish.getRandomX(1.0D), fish.getRandomY() + 0.5D, fish.getRandomZ(1.0D), d0, d1, d2);
-        }
         FishBreedingUtil.spawnFishFromBreeding((ServerLevel) this.level, this.fish, this.partner);
     }
 }
