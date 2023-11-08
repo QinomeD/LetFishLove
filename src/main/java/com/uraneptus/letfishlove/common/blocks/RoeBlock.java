@@ -57,7 +57,7 @@ public class RoeBlock extends Block {
     }
 
     private static int getHatchDelay(RandomSource pRandom) {
-        return pRandom.nextInt(30, 70);
+        return pRandom.nextInt(80, 140);
     }
 
     @Override

@@ -1,73 +1,96 @@
 package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
-import com.uraneptus.letfishlove.core.registry.LFLBlocks;
+import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
+import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 
-public class FishLayRoeGoal extends MoveToBlockGoal {
+public class FishLayRoeGoal extends Goal {
     private final AbstractFish fish;
+    private double wantedX;
+    private double wantedY;
+    private double wantedZ;
 
-    public FishLayRoeGoal(AbstractFish pMob, double pSpeedModifier, int pSearchRange) {
-        super(pMob, pSpeedModifier, pSearchRange, 3);
-        this.fish = pMob;
+    public FishLayRoeGoal(AbstractFish fish) {
+        this.fish = fish;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
 
     @Override
     public boolean canUse() {
-        return FishBreedingUtil.getFishCap(fish).isPregnant() && super.canUse();
+        LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
+        if (!fishOptional.isPresent() || fishOptional.resolve().isEmpty()) {
+            return false;
+        } else {
+            return fishOptional.resolve().get().isPregnant() && this.setWantedPos();
+        }
+    }
+
+    protected boolean setWantedPos() {
+        Vec3 vec3 = this.getPosition();
+        if (vec3 == null) {
+            return false;
+        } else {
+            this.wantedX = vec3.x;
+            this.wantedY = vec3.y;
+            this.wantedZ = vec3.z;
+            return true;
+        }
     }
 
     @Override
     public boolean canContinueToUse() {
-        return FishBreedingUtil.getFishCap(fish).isPregnant() && super.canContinueToUse();
+        LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
+        return !this.fish.getNavigation().isDone() && (fishOptional.isPresent() || !fishOptional.resolve().isEmpty()) && fishOptional.resolve().get().isPregnant();
     }
 
     @Override
-    protected boolean isValidTarget(LevelReader pLevel, BlockPos pPos) {
-        return pLevel.getFluidState(pPos).is(Fluids.WATER) && pLevel.getBlockState(pPos.above()).isAir();
+    public void start() {
+        this.fish.getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, 1.0D);
     }
 
     @Override
-    public void tick() {
-        Level level = fish.getLevel();
-        if (this.isReachedTarget()) {
-            ResourceLocation registryName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType());
-            TagKey<Block> blockTag = TagKey.create(Registry.BLOCK_REGISTRY, LetFishLoveMod.modPrefix("fish_roe/" + registryName.getPath()));
-            System.out.println(blockTag.location());
-            List<Block> roeBlocks = ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
-            System.out.println(roeBlocks);
-            System.out.println(roeBlocks.size());
-            if (!roeBlocks.isEmpty()) {
-
-                int entry = 0;
-                if (roeBlocks.size() > 1) {
-                    entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
-                }
-
-                level.setBlockAndUpdate(getMoveToTarget(), roeBlocks.get(entry).defaultBlockState());
+    public void stop() {
+        Level level = this.fish.getLevel();
+        String fishTypeName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType()).getPath();
+        TagKey<Block> blockTag = TagKey.create(Registry.BLOCK_REGISTRY, LetFishLoveMod.modPrefix("fish_roe/" + fishTypeName));
+        List<Block> roeBlocks = ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
+        if (!roeBlocks.isEmpty()) {
+            int entry = 0;
+            if (roeBlocks.size() > 1) {
+                entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
             }
-            FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
+
+            level.setBlockAndUpdate(new BlockPos(wantedX, wantedY, wantedZ).above(), roeBlocks.get(entry).defaultBlockState());
         }
-        super.tick();
+        FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
     }
+
+    @Nullable
+    protected Vec3 getPosition() {
+        Level level = this.fish.getLevel();
+
+        for(BlockPos blockpos1 : BlockPos.betweenClosed(Mth.floor(this.fish.getX() - 5.0D), Mth.floor(this.fish.getY() - 5.0D), Mth.floor(this.fish.getZ() - 5.0D), Mth.floor(this.fish.getX() + 5.0D), this.fish.getBlockY(), Mth.floor(this.fish.getZ() + 5.0D))) {
+            if (level.getFluidState(blockpos1).is(Fluids.WATER) && level.getBlockState(blockpos1.above()).isAir() /*&& level.getBlockState(blockpos1.relative(fish.getMotionDirection())).isCollisionShapeFullBlock(level, blockpos1)*/) {
+                return Vec3.atCenterOf(blockpos1);
+            }
+        }
+        return null;
+    }
+
 }

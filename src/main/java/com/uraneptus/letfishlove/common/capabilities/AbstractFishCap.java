@@ -86,11 +86,11 @@ public class AbstractFishCap extends LivingEntityCapability {
     }
 
     public boolean isPregnant() {
-        return isPregnant;
+        return this.isPregnant;
     }
 
     public void setPregnant(boolean pregnant, boolean sync) {
-        isPregnant = pregnant;
+        this.isPregnant = pregnant;
         if (sync) {
             this.updateTracking();
         }

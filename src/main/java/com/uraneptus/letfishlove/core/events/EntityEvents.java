@@ -7,9 +7,7 @@ import com.uraneptus.letfishlove.common.entity.FishBreedGoal;
 import com.uraneptus.letfishlove.common.entity.FishBreedingUtil;
 import com.uraneptus.letfishlove.common.entity.FishLayRoeGoal;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -83,7 +81,7 @@ public class EntityEvents {
             TagKey<Item> temptationItems = TagKey.create(Registry.ITEM_REGISTRY, LetFishLoveMod.modPrefix("fish_food/" + regName));
             fish.goalSelector.addGoal(2, new TemptGoal(fish, 1.2D, Ingredient.of(temptationItems), false));
             fish.goalSelector.addGoal(3, new FishBreedGoal(fish, 1.0D));
-            fish.goalSelector.addGoal(3, new FishLayRoeGoal(fish, 1.0D, 10));
+            fish.goalSelector.addGoal(3, new FishLayRoeGoal(fish));
         }
     }
 }
