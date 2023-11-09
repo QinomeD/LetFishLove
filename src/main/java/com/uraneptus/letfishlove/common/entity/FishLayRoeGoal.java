@@ -1,14 +1,18 @@
 package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
+import com.uraneptus.letfishlove.common.blocks.TropicalFishRoeBlock;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
@@ -76,7 +80,11 @@ public class FishLayRoeGoal extends Goal {
                 entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
             }
 
-            level.setBlockAndUpdate(new BlockPos(wantedX, wantedY, wantedZ).above(), roeBlocks.get(entry).defaultBlockState());
+            Block roe = roeBlocks.get(entry);
+            if (fish instanceof TropicalFish tropicalFish && roe instanceof TropicalFishRoeBlock roeBlock) {
+                roeBlock.setFishVariant(tropicalFish.getVariant());
+            }
+            level.setBlockAndUpdate(new BlockPos(wantedX, wantedY, wantedZ).above(), roe.defaultBlockState());
         }
         FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
     }

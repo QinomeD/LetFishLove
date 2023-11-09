@@ -89,6 +89,6 @@ public class FishBreedGoal extends Goal {
     }
 
     protected void breed() {
-        FishBreedingUtil.spawnFishFromBreeding((ServerLevel) this.level, this.fish, this.partner);
+        FishBreedingUtil.spawnFishFromBreeding((ServerLevel)this.level, this.fish, this.partner);
     }
 }

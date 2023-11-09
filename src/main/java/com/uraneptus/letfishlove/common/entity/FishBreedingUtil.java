@@ -51,10 +51,6 @@ public class FishBreedingUtil {
         }
     }
 
-
-
-    //TODO this will later handle laying roe etc. It's currently just
-    //TODO randomize tropical fish look
     public static void spawnFishFromBreeding(ServerLevel pLevel, AbstractFish thisFish, AbstractFish otherFish) {
         AbstractFishCap thisFishCap = getFishCap(thisFish);
         AbstractFishCap otherFishCap = getFishCap(otherFish);
@@ -66,6 +62,7 @@ public class FishBreedingUtil {
 
         if (serverplayer != null) {
             //Usually a trigger would be here
+            //TODO figure out how to trigger this
             serverplayer.awardStat(Stats.ANIMALS_BRED);
         }
 

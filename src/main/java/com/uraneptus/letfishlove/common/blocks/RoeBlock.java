@@ -12,6 +12,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -28,9 +29,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.stream.Collectors;
 
 public class RoeBlock extends Block {
-    private final EntityType<?> fish;
-    private final UniformInt hatchAmount;
+    private EntityType<?> fish;
+    private UniformInt hatchAmount;
     //This might later be individual for different fish
+    //TODO adjust hatch delay
     private static final int DEFAULT_MIN_HATCH_TICK_DELAY = 3600;
     private static final int DEFAULT_MAX_HATCH_TICK_DELAY = 12000;
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D);
@@ -97,11 +99,15 @@ public class RoeBlock extends Block {
         pLevel.destroyBlock(pPos, false);
     }
 
-    private void spawnFish(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    protected void spawnFish(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         int i = pRandom.nextInt(hatchAmount.getMinValue(), hatchAmount.getMaxValue());
 
         for(int j = 1; j <= i; ++j) {
             if (fish != null && fish.create(pLevel) instanceof AbstractFish fish) {
+                if (fish instanceof TropicalFish tropicalFish) {
+
+                }
+
                 double d0 = (double)pPos.getX() + this.getRandomPositionOffset(pRandom);
                 double d1 = (double)pPos.getZ() + this.getRandomPositionOffset(pRandom);
                 int k = pRandom.nextInt(1, 361);
@@ -113,9 +119,25 @@ public class RoeBlock extends Block {
 
     }
 
-    private double getRandomPositionOffset(RandomSource pRandom) {
+    protected double getRandomPositionOffset(RandomSource pRandom) {
         double d0 = fish.getWidth() / 2.0F;
         return Mth.clamp(pRandom.nextDouble(), d0, 1.0D - d0);
+    }
+
+    public EntityType<?> getFish() {
+        return fish;
+    }
+
+    public void setFish(EntityType<?> fish) {
+        this.fish = fish;
+    }
+
+    public UniformInt getHatchAmount() {
+        return hatchAmount;
+    }
+
+    public void setHatchAmount(UniformInt hatchAmount) {
+        this.hatchAmount = hatchAmount;
     }
 
     public static Iterable<Block> getAllBlocks() {
