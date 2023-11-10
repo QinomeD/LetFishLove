@@ -1,5 +1,6 @@
 package com.uraneptus.letfishlove.common.blocks;
 
+import com.uraneptus.letfishlove.LFLConfig;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,8 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.AbstractFish;
-import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -24,23 +24,24 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.ForgeConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RoeBlock extends Block {
     private EntityType<?> fish;
     private UniformInt hatchAmount;
-    //This might later be individual for different fish
-    //TODO adjust hatch delay
-    private static final int DEFAULT_MIN_HATCH_TICK_DELAY = 3600;
-    private static final int DEFAULT_MAX_HATCH_TICK_DELAY = 12000;
+
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D);
 
-    public RoeBlock(EntityType<?> fish, UniformInt hatchAmount, Properties properties) {
+    public RoeBlock(EntityType<?> fish, Properties properties) {
         super(properties);
         this.fish = fish;
-        this.hatchAmount = hatchAmount;
     }
 
     @Override
@@ -59,7 +60,10 @@ public class RoeBlock extends Block {
     }
 
     private static int getHatchDelay(RandomSource pRandom) {
-        return pRandom.nextInt(80, 140);
+        if (!FMLEnvironment.production) {
+            return pRandom.nextInt(36, 120);
+        }
+        return pRandom.nextInt(LFLConfig.MIN_HATCH_DURATION.get(), LFLConfig.MAX_HATCH_DURATION.get());
     }
 
     @Override
@@ -100,23 +104,33 @@ public class RoeBlock extends Block {
     }
 
     protected void spawnFish(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        int i = pRandom.nextInt(hatchAmount.getMinValue(), hatchAmount.getMaxValue());
+        int i = pRandom.nextInt(calculateHatchAmount(pLevel).getMinValue(), calculateHatchAmount(pLevel).getMaxValue());
 
         for(int j = 1; j <= i; ++j) {
-            if (fish != null && fish.create(pLevel) instanceof AbstractFish fish) {
-                if (fish instanceof TropicalFish tropicalFish) {
-
-                }
-
+            if (fish != null && fish.create(pLevel) instanceof AbstractFish abstractFish) {
                 double d0 = (double)pPos.getX() + this.getRandomPositionOffset(pRandom);
                 double d1 = (double)pPos.getZ() + this.getRandomPositionOffset(pRandom);
                 int k = pRandom.nextInt(1, 361);
-                fish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
-                fish.setPersistenceRequired();
-                pLevel.addFreshEntity(fish);
+                abstractFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
+                abstractFish.setPersistenceRequired();
+                pLevel.addFreshEntity(abstractFish);
             }
         }
+    }
 
+    protected UniformInt calculateHatchAmount(ServerLevel pLevel) {
+        if (this.fish != null) {
+            if (fish.create(pLevel) instanceof Cod) {
+                return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
+            } else if (fish.create(pLevel) instanceof Pufferfish) {
+                return UniformInt.of(LFLConfig.PUFFERFISH_HATCH_AMOUNT_MIN.get(), LFLConfig.PUFFERFISH_HATCH_AMOUNT_MAX.get());
+            } else if (fish.create(pLevel) instanceof Salmon) {
+                return UniformInt.of(LFLConfig.SALMON_HATCH_AMOUNT_MIN.get(), LFLConfig.SALMON_HATCH_AMOUNT_MAX.get());
+            } else if (fish.create(pLevel) instanceof TropicalFish) {
+                return UniformInt.of(LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MIN.get(), LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MAX.get());
+            }
+        }//FALLBACK
+        return UniformInt.of(0, 1);
     }
 
     protected double getRandomPositionOffset(RandomSource pRandom) {

@@ -10,13 +10,13 @@ import net.minecraft.world.entity.animal.TropicalFish;
 public class TropicalFishRoeBlock extends RoeBlock {
     private int fishVariant;
 
-    public TropicalFishRoeBlock(EntityType<?> fish, UniformInt hatchAmount, Properties properties) {
-        super(fish, hatchAmount, properties);
+    public TropicalFishRoeBlock(EntityType<?> fish, Properties properties) {
+        super(fish, properties);
     }
 
     @Override
     protected void spawnFish(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        int i = pRandom.nextInt(getHatchAmount().getMinValue(), getHatchAmount().getMaxValue());
+        int i = pRandom.nextInt(calculateHatchAmount(pLevel).getMinValue(), calculateHatchAmount(pLevel).getMaxValue());
 
         for(int j = 1; j <= i; ++j) {
             if (getFish() != null && getFish().create(pLevel) instanceof TropicalFish tropicalFish) {

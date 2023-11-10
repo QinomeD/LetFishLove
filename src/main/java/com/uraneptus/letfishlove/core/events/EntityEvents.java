@@ -61,16 +61,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof AbstractFish fish) {
-            Level level = fish.getLevel();
-            LazyOptional<AbstractFishCap> capO = AbstractFishCapAttacher.getAbstractFishCapability(fish).cast();
-            if (capO.isPresent()) {
-                AbstractFishCap cap = capO.resolve().get();
-                System.out.println(cap.isPregnant);
-            }
 
-        }
     }
 
     @SubscribeEvent
