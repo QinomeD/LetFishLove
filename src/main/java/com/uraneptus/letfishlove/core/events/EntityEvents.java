@@ -43,17 +43,12 @@ public class EntityEvents {
             String regName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType()).getPath();
             TagKey<Item> temptationItems = TagKey.create(Registry.ITEM_REGISTRY, LetFishLoveMod.modPrefix("fish_food/" + regName));
             if (Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).isKnownTagName(temptationItems) && itemInHand.is(temptationItems)) {
-                LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(fish).cast();
-                if (!fishOptional.isPresent() || fishOptional.resolve().isEmpty()) {
-                    return;
-                } else {
-                    AbstractFishCap fishCap = fishOptional.resolve().get();
-                    if (fishCap.canFallInLove()) {
-                        fishCap.setInLove(fish, player, level);
-                        FishBreedingUtil.usePlayerItem(player, itemInHand);
-                        event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
-                        event.setCanceled(true);
-                    }
+                AbstractFishCap fishCap = FishBreedingUtil.getFishCap(fish);
+                if (fishCap.canFallInLove()) {
+                    fishCap.setInLove(fish, player, level);
+                    FishBreedingUtil.usePlayerItem(player, itemInHand);
+                    event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
+                    event.setCanceled(true);
                 }
             }
         }

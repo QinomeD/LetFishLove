@@ -39,10 +39,7 @@ public class FishBreedGoal extends Goal {
     }
 
     public boolean canUse() {
-        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
-        if (!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) {
-            return false;
-        } else if (!thisFishOptional.resolve().get().isInLove() || thisFishOptional.resolve().get().isPregnant()) {
+        if (!FishBreedingUtil.getFishCap(fish).isInLove() || FishBreedingUtil.getFishCap(fish).isPregnant()) {
             return false;
         } else {
             this.partner = this.getFreePartner();
@@ -51,8 +48,7 @@ public class FishBreedGoal extends Goal {
     }
 
     public boolean canContinueToUse() {
-        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.partner).cast();
-        return this.partner.isAlive() && (otherFishOptional.isPresent() || !otherFishOptional.resolve().isEmpty()) && otherFishOptional.resolve().get().isInLove() && this.loveTime < 100;
+        return this.partner != null && this.partner.isAlive() && FishBreedingUtil.getFishCap(partner).isInLove() && this.loveTime < 100;
     }
 
     public void stop() {

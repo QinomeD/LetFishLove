@@ -37,12 +37,7 @@ public class FishLayRoeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
-        if (!fishOptional.isPresent() || fishOptional.resolve().isEmpty()) {
-            return false;
-        } else {
-            return fishOptional.resolve().get().isPregnant() && this.setWantedPos();
-        }
+        return FishBreedingUtil.getFishCap(fish).isPregnant() && this.setWantedPos();
     }
 
     protected boolean setWantedPos() {
@@ -59,8 +54,7 @@ public class FishLayRoeGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        LazyOptional<AbstractFishCap> fishOptional = AbstractFishCapAttacher.getAbstractFishCapability(this.fish).cast();
-        return !this.fish.getNavigation().isDone() && (fishOptional.isPresent() || !fishOptional.resolve().isEmpty()) && fishOptional.resolve().get().isPregnant();
+        return !this.fish.getNavigation().isDone() && FishBreedingUtil.getFishCap(fish).isPregnant();
     }
 
     @Override
@@ -84,7 +78,7 @@ public class FishLayRoeGoal extends Goal {
             if (fish instanceof TropicalFish tropicalFish && roe instanceof TropicalFishRoeBlock roeBlock) {
                 roeBlock.setFishVariant(tropicalFish.getVariant());
             }
-            level.setBlockAndUpdate(new BlockPos(wantedX, wantedY, wantedZ).above(), roe.defaultBlockState());
+            level.setBlockAndUpdate(fish.blockPosition().above(), roe.defaultBlockState());
         }
         FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
     }
@@ -94,7 +88,7 @@ public class FishLayRoeGoal extends Goal {
         Level level = this.fish.getLevel();
 
         for(BlockPos blockpos1 : BlockPos.betweenClosed(Mth.floor(this.fish.getX() - 5.0D), Mth.floor(this.fish.getY() - 5.0D), Mth.floor(this.fish.getZ() - 5.0D), Mth.floor(this.fish.getX() + 5.0D), this.fish.getBlockY(), Mth.floor(this.fish.getZ() + 5.0D))) {
-            if (level.getFluidState(blockpos1).is(Fluids.WATER) && level.getBlockState(blockpos1.above()).isAir() /*&& level.getBlockState(blockpos1.relative(fish.getMotionDirection())).isCollisionShapeFullBlock(level, blockpos1)*/) {
+            if (level.getFluidState(blockpos1).is(Fluids.WATER) && level.getBlockState(blockpos1.above()).isAir()) {
                 return Vec3.atCenterOf(blockpos1);
             }
         }

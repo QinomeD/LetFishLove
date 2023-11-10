@@ -34,20 +34,12 @@ public class FishBreedingUtil {
     }
 
     public static boolean canMate(AbstractFish thisFish, AbstractFish pOtherFish) {
-        LazyOptional<AbstractFishCap> thisFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(thisFish).cast();
-        LazyOptional<AbstractFishCap> otherFishOptional = AbstractFishCapAttacher.getAbstractFishCapability(pOtherFish).cast();
-
-        if ((!thisFishOptional.isPresent() || thisFishOptional.resolve().isEmpty()) && (!otherFishOptional.isPresent() || otherFishOptional.resolve().isEmpty())) {
-            return false;
-        }
         if (pOtherFish == thisFish) {
             return false;
         } else if (pOtherFish.getClass() != thisFish.getClass()) {
             return false;
         } else {
-            AbstractFishCap thisFishCap = thisFishOptional.resolve().get();
-            AbstractFishCap otherFishCap = otherFishOptional.resolve().get();
-            return thisFishCap.isInLove() && otherFishCap.isInLove();
+            return getFishCap(thisFish).isInLove() && getFishCap(pOtherFish).isInLove();
         }
     }
 

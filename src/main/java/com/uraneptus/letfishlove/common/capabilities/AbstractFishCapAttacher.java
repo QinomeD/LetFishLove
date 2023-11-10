@@ -35,12 +35,9 @@ public class AbstractFishCapAttacher  extends CapabilityAttacher {
         genericAttachCapability(event, new AbstractFishCap(entity), ABSTRACT_FISH_CAPABILITY, ABSTRACT_FISH_CAPABILITY_RL);
     }
 
-    public static void setupChannel(){
-        channel = NetworkRegistry.newSimpleChannel(
-                LetFishLoveMod.modPrefix("abstract_fish_cap_channel"), () -> "1",
-                s -> true, s -> true);
+    public static void setupChannel() {
+        channel = NetworkRegistry.newSimpleChannel(LetFishLoveMod.modPrefix("abstract_fish_cap_channel"), () -> "1", s -> true, s -> true);
     }
-
 
     public static void register() {
         CapabilityAttacher.registerCapability(CAPABILITY_CLASS);
