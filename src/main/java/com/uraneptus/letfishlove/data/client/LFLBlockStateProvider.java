@@ -2,7 +2,7 @@ package com.uraneptus.letfishlove.data.client;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.common.blocks.RoeBlock;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -13,8 +13,8 @@ import static com.uraneptus.letfishlove.data.LFLDatagenUtil.*;
 
 public class LFLBlockStateProvider extends BlockStateProvider {
 
-    public LFLBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, LetFishLoveMod.MOD_ID, exFileHelper);
+    public LFLBlockStateProvider(PackOutput packOutput, ExistingFileHelper exFileHelper) {
+        super(packOutput, LetFishLoveMod.MOD_ID, exFileHelper);
     }
 
     @Override

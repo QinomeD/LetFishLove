@@ -2,12 +2,12 @@ package com.uraneptus.letfishlove.data.client;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class LFLLangProvider extends LanguageProvider {
-    public LFLLangProvider(DataGenerator gen) {
-        super(gen, LetFishLoveMod.MOD_ID, "en_us");
+    public LFLLangProvider(PackOutput packOutput) {
+        super(packOutput, LetFishLoveMod.MOD_ID, "en_us");
     }
 
     @Override

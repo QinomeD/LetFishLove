@@ -3,7 +3,7 @@ package com.uraneptus.letfishlove.data.client;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.registry.LFLItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -15,8 +15,8 @@ import static com.uraneptus.letfishlove.data.LFLDatagenUtil.*;
 
 public class LFLItemModelProvider extends ItemModelProvider {
 
-    public LFLItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, LetFishLoveMod.MOD_ID, existingFileHelper);
+    public LFLItemModelProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
+        super(packOutput, LetFishLoveMod.MOD_ID, existingFileHelper);
     }
 
     @Override

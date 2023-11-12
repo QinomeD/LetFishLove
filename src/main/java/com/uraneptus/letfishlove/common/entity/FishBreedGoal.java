@@ -1,16 +1,10 @@
 package com.uraneptus.letfishlove.common.entity;
 
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.AbstractFish;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -32,7 +26,7 @@ public class FishBreedGoal extends Goal {
 
     public FishBreedGoal(AbstractFish fish, double pSpeedModifier, Class<? extends AbstractFish> pPartnerClass) {
         this.fish = fish;
-        this.level = fish.level;
+        this.level = fish.level();
         this.partnerClass = pPartnerClass;
         this.speedModifier = pSpeedModifier;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));

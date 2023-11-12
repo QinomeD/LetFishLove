@@ -2,20 +2,15 @@ package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nullable;
 
 public class FishBreedingUtil {
 

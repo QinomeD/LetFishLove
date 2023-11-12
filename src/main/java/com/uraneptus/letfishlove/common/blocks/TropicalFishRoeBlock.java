@@ -3,12 +3,11 @@ package com.uraneptus.letfishlove.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TropicalFish;
 
 public class TropicalFishRoeBlock extends RoeBlock {
-    private int fishVariant;
+    private TropicalFish.Pattern fishVariant;
 
     public TropicalFishRoeBlock(EntityType<?> fish, Properties properties) {
         super(fish, properties);
@@ -31,11 +30,11 @@ public class TropicalFishRoeBlock extends RoeBlock {
         }
     }
 
-    public int getFishVariant() {
+    public TropicalFish.Pattern getFishVariant() {
         return this.fishVariant;
     }
 
-    public void setFishVariant(int variant) {
+    public void setFishVariant(TropicalFish.Pattern variant) {
         this.fishVariant = variant;
     }
 }
