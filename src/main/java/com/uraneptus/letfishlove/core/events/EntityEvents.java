@@ -2,7 +2,6 @@ package com.uraneptus.letfishlove.core.events;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
 import com.uraneptus.letfishlove.common.entity.FishBreedGoal;
 import com.uraneptus.letfishlove.common.entity.FishBreedingUtil;
 import com.uraneptus.letfishlove.common.entity.FishLayRoeGoal;
@@ -11,6 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -56,7 +55,15 @@ public class EntityEvents {
 
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
-
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof AbstractFish fish) {
+            AbstractFishCap cap = FishBreedingUtil.getFishCap(fish);
+            if (cap.getCanLoveCooldown() > 0) {
+                cap.setCanLoveCooldown(cap.getCanLoveCooldown() - 1, true);
+            }
+            //System.out.println("Cooldown: " + cap.getCanLoveCooldown());
+            //System.out.println("Pregnant: " + cap.isPregnant());
+        }
     }
 
     @SubscribeEvent

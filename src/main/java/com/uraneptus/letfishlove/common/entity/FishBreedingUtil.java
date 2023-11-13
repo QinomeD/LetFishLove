@@ -60,6 +60,8 @@ public class FishBreedingUtil {
 
         thisFishCap.resetLove();
         otherFishCap.resetLove();
+        thisFishCap.setCanLoveCooldown(6000, true);
+        otherFishCap.setCanLoveCooldown(6000, true);
         thisFishCap.setPregnant(true, true);
         pLevel.broadcastEntityEvent(thisFish, (byte)18);
         if (pLevel.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
