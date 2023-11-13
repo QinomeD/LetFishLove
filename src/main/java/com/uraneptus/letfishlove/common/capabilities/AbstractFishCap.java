@@ -20,6 +20,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     @Nullable
     public UUID loveCause;
     public boolean isPregnant;
+    public int canLoveCooldown;
 
     public AbstractFishCap(AbstractFish entity) {
         super(entity);
@@ -49,7 +50,7 @@ public class AbstractFishCap extends LivingEntityCapability {
     }
 
     public boolean canFallInLove() {
-        return this.getInLoveInt() <= 0 && !this.isPregnant();
+        return this.getInLoveInt() <= 0 && !this.isPregnant() && this.getCanLoveCooldown() == 0;
     }
 
     public void setInLove(AbstractFish fish, @Nullable Player pPlayer, Level level) {
@@ -96,6 +97,17 @@ public class AbstractFishCap extends LivingEntityCapability {
         }
     }
 
+    public int getCanLoveCooldown() {
+        return this.canLoveCooldown;
+    }
+
+    public void setCanLoveCooldown(int canLoveCooldown, boolean sync) {
+        this.canLoveCooldown = canLoveCooldown;
+        if (sync) {
+            this.updateTracking();
+        }
+    }
+
     @Override
     public CompoundTag serializeNBT(boolean savingToDisk) {
         CompoundTag tag = new CompoundTag();
@@ -105,6 +117,7 @@ public class AbstractFishCap extends LivingEntityCapability {
             tag.putUUID("LoveCause", this.loveCause);
         }
         tag.putBoolean("isPregnant", this.isPregnant);
+        tag.putInt("canLoveCooldown", this.canLoveCooldown);
 
         return tag;
     }
@@ -114,6 +127,7 @@ public class AbstractFishCap extends LivingEntityCapability {
         this.inLove = nbt.getInt("inLove");
         this.loveCause = nbt.hasUUID("LoveCause") ? nbt.getUUID("LoveCause") : null;
         this.isPregnant = nbt.getBoolean("isPregnant");
+        this.canLoveCooldown = nbt.getInt("canLoveCooldown");
     }
 
     @Override
@@ -125,19 +139,4 @@ public class AbstractFishCap extends LivingEntityCapability {
     public SimpleChannel getNetworkChannel() {
         return AbstractFishCapAttacher.channel;
     }
-
-    /*
-    @Mod.EventBusSubscriber
-    public static class Events {
-
-        @SubscribeEvent
-        public static void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof AbstractFish) {
-                final AbstractFishCapProvider provider = new AbstractFishCapProvider();
-                event.addCapability(AbstractFishCapProvider.LOCATION, provider);
-            }
-        }
-    }
-
-     */
 }

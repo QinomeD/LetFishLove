@@ -10,6 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.player.Player;
@@ -54,9 +55,14 @@ public class EntityEvents {
 
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() instanceof  AbstractFish fish) {
-            //System.out.println("Is Pregnant: " + FishBreedingUtil.getFishCap(fish).isPregnant());
-            //System.out.println("Can fall in love: " + FishBreedingUtil.getFishCap(fish).canFallInLove());
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof AbstractFish fish) {
+            AbstractFishCap cap = FishBreedingUtil.getFishCap(fish);
+            if (cap.getCanLoveCooldown() > 0) {
+                cap.setCanLoveCooldown(cap.getCanLoveCooldown() - 1, true);
+            }
+            //System.out.println("Cooldown: " + cap.getCanLoveCooldown());
+            //System.out.println("Pregnant: " + cap.isPregnant());
         }
     }
 
