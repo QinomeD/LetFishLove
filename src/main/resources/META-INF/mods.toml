@@ -7,6 +7,7 @@ modId="letfishlove"
 version="${file.jarVersion}" #mandatory
 displayName="Let Fish Love" #mandatory
 credits="Assets and Idea by toomanykitkats" #optional
+logoFile = "letfishlove_icon.png"
 authors="Uraneptus" #optional
 description='''
 '''
