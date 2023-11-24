@@ -1,5 +1,6 @@
 package com.uraneptus.letfishlove.common.blocks;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.animal.TropicalFish;
 
 public class TropicalFishRoeBlock extends RoeBlock {
     private int fishVariant;
+    private boolean fromBreeding = false;
 
     public TropicalFishRoeBlock(EntityType<?> fish, Properties properties) {
         super(fish, properties);
@@ -25,7 +27,12 @@ public class TropicalFishRoeBlock extends RoeBlock {
                 int k = pRandom.nextInt(1, 361);
                 tropicalFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
                 tropicalFish.setPersistenceRequired();
-                tropicalFish.setVariant(this.getFishVariant());
+                if (fromBreeding) {
+                    tropicalFish.setVariant(this.getFishVariant());
+                } else {
+                    tropicalFish.setVariant(Util.getRandom(TropicalFish.COMMON_VARIANTS, pRandom));
+                }
+
                 pLevel.addFreshEntity(tropicalFish);
             }
         }
@@ -37,5 +44,6 @@ public class TropicalFishRoeBlock extends RoeBlock {
 
     public void setFishVariant(int variant) {
         this.fishVariant = variant;
+        this.fromBreeding = true;
     }
 }
