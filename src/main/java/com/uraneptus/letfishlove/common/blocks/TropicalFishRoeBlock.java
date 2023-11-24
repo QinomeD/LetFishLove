@@ -1,5 +1,6 @@
 package com.uraneptus.letfishlove.common.blocks;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -24,10 +25,21 @@ public class TropicalFishRoeBlock extends RoeBlock {
                 int k = pRandom.nextInt(1, 361);
                 tropicalFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
                 tropicalFish.setPersistenceRequired();
-                tropicalFish.setVariant(this.getFishVariant());
+                if (this.getFishVariant() == null) {
+                    setRandomVariant(tropicalFish, pRandom);
+                } else {
+                    tropicalFish.setVariant(this.getFishVariant());
+                }
+
                 pLevel.addFreshEntity(tropicalFish);
             }
         }
+    }
+
+    public void setRandomVariant(TropicalFish tropicalFish, RandomSource randomSource) {
+        TropicalFish.Variant randomVariant = Util.getRandom(TropicalFish.COMMON_VARIANTS, randomSource);
+        int variantId = randomVariant.getPackedId();
+        tropicalFish.setPackedVariant(TropicalFish.packVariant(TropicalFish.getPattern(variantId), TropicalFish.getBaseColor(variantId), TropicalFish.getPatternColor(variantId)));
     }
 
     public TropicalFish.Pattern getFishVariant() {
