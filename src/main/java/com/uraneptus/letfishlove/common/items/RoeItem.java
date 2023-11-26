@@ -24,7 +24,7 @@ public class RoeItem extends PlaceOnWaterBlockItem {
         BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         BlockState blockState = level.getBlockState(hitResult.getBlockPos());
         ItemStack itemstack = player.getItemInHand(hand);
-        if (!blockState.getFluidState().is(Fluids.WATER)) {
+        if (!(blockState.getFluidState().is(Fluids.WATER) && level.getBlockState(hitResult.getBlockPos().above()).isAir())) {
             if (player.canEat(itemstack.getFoodProperties(player).canAlwaysEat())) {
                 player.startUsingItem(hand);
                 return InteractionResultHolder.consume(itemstack);
