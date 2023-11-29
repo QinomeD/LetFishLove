@@ -6,8 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +18,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class FishLayRoeGoal extends MoveToBlockGoal {
-    private final AbstractFish fish;
+    private final WaterAnimal fish;
 
-    public FishLayRoeGoal(AbstractFish fish) {
+    public FishLayRoeGoal(WaterAnimal fish) {
         super(fish, 0.8F, 10, 5);
         this.fish = fish;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));

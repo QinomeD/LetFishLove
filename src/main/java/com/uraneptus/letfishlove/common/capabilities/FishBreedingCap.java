@@ -7,7 +7,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -15,14 +16,14 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class AbstractFishCap extends LivingEntityCapability {
+public class FishBreedingCap extends LivingEntityCapability {
     public int inLove;
     @Nullable
     public UUID loveCause;
     public boolean isPregnant;
     public int canLoveCooldown;
 
-    public AbstractFishCap(AbstractFish entity) {
+    public FishBreedingCap(WaterAnimal entity) {
         super(entity);
     }
 
@@ -53,7 +54,7 @@ public class AbstractFishCap extends LivingEntityCapability {
         return this.getInLoveInt() <= 0 && !this.isPregnant() && this.getCanLoveCooldown() == 0;
     }
 
-    public void setInLove(AbstractFish fish, @Nullable Player pPlayer, Level level) {
+    public void setInLove(WaterAnimal entity, @Nullable Player pPlayer, Level level) {
         RandomSource random = level.getRandom();
         this.setInLoveInt(600, true);
         if (pPlayer != null) {
@@ -64,7 +65,7 @@ public class AbstractFishCap extends LivingEntityCapability {
             double d0 = random.nextGaussian() * 0.02D;
             double d1 = random.nextGaussian() * 0.02D;
             double d2 = random.nextGaussian() * 0.02D;
-            level.addParticle(ParticleTypes.HEART, fish.getRandomX(1.0D), fish.getRandomY() + 0.5D, fish.getRandomZ(1.0D), d0, d1, d2);
+            level.addParticle(ParticleTypes.HEART, entity.getRandomX(1.0D), entity.getRandomY() + 0.5D, entity.getRandomZ(1.0D), d0, d1, d2);
         }
     }
 
@@ -132,11 +133,11 @@ public class AbstractFishCap extends LivingEntityCapability {
 
     @Override
     public EntityCapabilityStatusPacket createUpdatePacket() {
-        return new SimpleEntityCapabilityStatusPacket(this.livingEntity.getId(), AbstractFishCapAttacher.ABSTRACT_FISH_CAPABILITY_RL, this);
+        return new SimpleEntityCapabilityStatusPacket(this.livingEntity.getId(), FishBreedingCapAttacher.LET_FISH_LOVE_CAP_RL, this);
     }
 
     @Override
     public SimpleChannel getNetworkChannel() {
-        return AbstractFishCapAttacher.channel;
+        return FishBreedingCapAttacher.channel;
     }
 }

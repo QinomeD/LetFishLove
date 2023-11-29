@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove.core.events;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCap;
+import com.uraneptus.letfishlove.common.capabilities.FishBreedingCap;
 import com.uraneptus.letfishlove.common.entity.FishBreedGoal;
 import com.uraneptus.letfishlove.common.entity.FishBreedingUtil;
 import com.uraneptus.letfishlove.common.entity.FishLayRoeGoal;
@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,11 +39,11 @@ public class EntityEvents {
         Entity target = event.getTarget();
         Level level = event.getLevel();
 
-        if (target instanceof AbstractFish fish) {
+        if (target instanceof WaterAnimal fish && FishBreedingUtil.isBreedable(fish)) {
             String regName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType()).getPath();
             TagKey<Item> temptationItems = TagKey.create(Registry.ITEM_REGISTRY, LetFishLoveMod.modPrefix("fish_food/" + regName));
             if (Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).isKnownTagName(temptationItems) && itemInHand.is(temptationItems)) {
-                AbstractFishCap fishCap = FishBreedingUtil.getFishCap(fish);
+                FishBreedingCap fishCap = FishBreedingUtil.getFishCap(fish);
                 if (fishCap.canFallInLove()) {
                     fishCap.setInLove(fish, player, level);
                     FishBreedingUtil.usePlayerItem(player, itemInHand);
@@ -56,8 +57,8 @@ public class EntityEvents {
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity instanceof AbstractFish fish) {
-            AbstractFishCap cap = FishBreedingUtil.getFishCap(fish);
+        if (entity instanceof WaterAnimal fish && FishBreedingUtil.isBreedable(fish)) {
+            FishBreedingCap cap = FishBreedingUtil.getFishCap(fish);
             if (cap.getCanLoveCooldown() > 0) {
                 cap.setCanLoveCooldown(cap.getCanLoveCooldown() - 1, true);
             }
@@ -69,7 +70,7 @@ public class EntityEvents {
     @SubscribeEvent
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof AbstractFish fish) {
+        if (entity instanceof WaterAnimal fish && FishBreedingUtil.isBreedable(fish)) {
             String regName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType()).getPath();
             TagKey<Item> temptationItems = TagKey.create(Registry.ITEM_REGISTRY, LetFishLoveMod.modPrefix("fish_food/" + regName));
             fish.goalSelector.addGoal(2, new TemptGoal(fish, 1.2D, Ingredient.of(temptationItems), false));

@@ -107,13 +107,13 @@ public class RoeBlock extends Block {
         int i = pRandom.nextInt(calculateHatchAmount(pLevel).getMinValue(), calculateHatchAmount(pLevel).getMaxValue());
 
         for(int j = 1; j <= i; ++j) {
-            if (fish != null && fish.create(pLevel) instanceof AbstractFish abstractFish) {
+            if (fish != null && fish.create(pLevel) instanceof WaterAnimal waterAnimal) {
                 double d0 = (double)pPos.getX() + this.getRandomPositionOffset(pRandom);
                 double d1 = (double)pPos.getZ() + this.getRandomPositionOffset(pRandom);
                 int k = pRandom.nextInt(1, 361);
-                abstractFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
-                abstractFish.setPersistenceRequired();
-                pLevel.addFreshEntity(abstractFish);
+                waterAnimal.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
+                waterAnimal.setPersistenceRequired();
+                pLevel.addFreshEntity(waterAnimal);
             }
         }
     }

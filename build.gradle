@@ -118,6 +118,11 @@ jar {
     }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]

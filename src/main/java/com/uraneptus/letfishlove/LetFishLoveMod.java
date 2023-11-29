@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove;
 
 import com.mojang.logging.LogUtils;
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
+import com.uraneptus.letfishlove.common.capabilities.FishBreedingCapAttacher;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import com.uraneptus.letfishlove.core.registry.LFLItems;
 import com.uraneptus.letfishlove.data.client.LFLBlockStateProvider;
@@ -9,6 +9,7 @@ import com.uraneptus.letfishlove.data.client.LFLItemModelProvider;
 import com.uraneptus.letfishlove.data.client.LFLLangProvider;
 import com.uraneptus.letfishlove.data.server.LFLLootTableProvider;
 import com.uraneptus.letfishlove.data.server.tags.LFLBlockTagsProvider;
+import com.uraneptus.letfishlove.data.server.tags.LFLEntityTagsProvider;
 import com.uraneptus.letfishlove.data.server.tags.LFLItemTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +23,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 
 @Mod(LetFishLoveMod.MOD_ID)
@@ -49,8 +48,8 @@ public class LetFishLoveMod {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        AbstractFishCapAttacher.setupChannel();
-        AbstractFishCapAttacher.register();
+        FishBreedingCapAttacher.setupChannel();
+        FishBreedingCapAttacher.register();
     }
 
     @SubscribeEvent
@@ -67,6 +66,7 @@ public class LetFishLoveMod {
         LFLBlockTagsProvider blockTagsProvider = new LFLBlockTagsProvider(generator, fileHelper);
         generator.addProvider(includeServer, blockTagsProvider);
         generator.addProvider(includeServer, new LFLItemTagsProvider(generator, blockTagsProvider, fileHelper));
+        generator.addProvider(includeServer, new LFLEntityTagsProvider(generator, fileHelper));
         generator.addProvider(includeServer, new LFLLootTableProvider(generator));
 
         /*
