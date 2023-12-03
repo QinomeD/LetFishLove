@@ -8,11 +8,13 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TropicalFish;
 
+import java.util.function.Supplier;
+
 public class TropicalFishRoeBlock extends RoeBlock {
     private int fishVariant;
     private boolean fromBreeding = false;
 
-    public TropicalFishRoeBlock(EntityType<?> fish, Properties properties) {
+    public TropicalFishRoeBlock(Supplier<EntityType<?>> fish, Properties properties) {
         super(fish, properties);
     }
 
