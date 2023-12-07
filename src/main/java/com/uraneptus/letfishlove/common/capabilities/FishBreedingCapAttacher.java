@@ -43,7 +43,7 @@ public class FishBreedingCapAttacher extends CapabilityAttacher {
 
     public static void register() {
         CapabilityAttacher.registerCapability(CAPABILITY_CLASS);
-        CapabilityAttacher.registerEntityAttacher(AbstractFish.class, FishBreedingCapAttacher::attach, FishBreedingCapAttacher::getFishBreedingCapability, true);
+        CapabilityAttacher.registerEntityAttacher(WaterAnimal.class, FishBreedingCapAttacher::attach, FishBreedingCapAttacher::getFishBreedingCapability, true);
         SimpleEntityCapabilityStatusPacket.register(channel, 0);
         SimpleEntityCapabilityStatusPacket.registerRetriever(LET_FISH_LOVE_CAP_RL, FishBreedingCapAttacher::getExampleLivingEntityCapabilityUnwrap);
     }
