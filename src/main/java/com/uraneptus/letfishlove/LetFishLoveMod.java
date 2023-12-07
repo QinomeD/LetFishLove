@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove;
 
 import com.mojang.logging.LogUtils;
-import com.uraneptus.letfishlove.common.capabilities.AbstractFishCapAttacher;
+import com.uraneptus.letfishlove.common.capabilities.FishBreedingCapAttacher;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import com.uraneptus.letfishlove.core.registry.LFLItems;
 import com.uraneptus.letfishlove.data.client.LFLBlockStateProvider;
@@ -9,6 +9,7 @@ import com.uraneptus.letfishlove.data.client.LFLItemModelProvider;
 import com.uraneptus.letfishlove.data.client.LFLLangProvider;
 import com.uraneptus.letfishlove.data.server.loot.LFLLootTableProvider;
 import com.uraneptus.letfishlove.data.server.tags.LFLBlockTagsProvider;
+import com.uraneptus.letfishlove.data.server.tags.LFLEntityTagsProvider;
 import com.uraneptus.letfishlove.data.server.tags.LFLItemTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -51,8 +52,8 @@ public class LetFishLoveMod {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        AbstractFishCapAttacher.setupChannel();
-        AbstractFishCapAttacher.register();
+        FishBreedingCapAttacher.setupChannel();
+        FishBreedingCapAttacher.register();
     }
 
     @SubscribeEvent
@@ -71,16 +72,8 @@ public class LetFishLoveMod {
         LFLBlockTagsProvider blockTagsProvider = new LFLBlockTagsProvider(packOutput, lookupProvider, fileHelper);
         generator.addProvider(includeServer, blockTagsProvider);
         generator.addProvider(includeServer, new LFLItemTagsProvider(packOutput, lookupProvider, blockTagsProvider.contentsGetter(), fileHelper));
+        generator.addProvider(includeServer, new LFLEntityTagsProvider(packOutput, lookupProvider, fileHelper));
         generator.addProvider(includeServer, new LFLLootTableProvider(packOutput));
-
-        /*
-        SeasonalsBlockTagsProvider blockTagsProvider = new SeasonalsBlockTagsProvider(generator, fileHelper);
-        generator.addProvider(includeServer, blockTagsProvider);
-        generator.addProvider(includeServer, new SeasonalsItemTagsProvider(generator, blockTagsProvider, fileHelper));
-        generator.addProvider(includeServer, new SeasonalsAdvancementModifierProvider(generator));
-        generator.addProvider(includeServer, new SeasonalsLootModifierProvider(generator));
-        generator.addProvider(includeServer, new SeasonalsRecipeProvider(generator));
-         */
     }
 
 }

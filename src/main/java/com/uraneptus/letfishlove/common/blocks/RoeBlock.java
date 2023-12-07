@@ -27,15 +27,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class RoeBlock extends Block {
-    private EntityType<?> fish;
+    private Supplier<EntityType<?>> fish;
     private UniformInt hatchAmount;
 
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D);
 
-    public RoeBlock(EntityType<?> fish, Properties properties) {
+    public RoeBlock(Supplier<EntityType<?>> fish, Properties properties) {
         super(properties);
         this.fish = fish;
     }
@@ -103,42 +104,50 @@ public class RoeBlock extends Block {
         int i = pRandom.nextInt(calculateHatchAmount(pLevel).getMinValue(), calculateHatchAmount(pLevel).getMaxValue());
 
         for(int j = 1; j <= i; ++j) {
-            if (fish != null && fish.create(pLevel) instanceof AbstractFish abstractFish) {
+            if (createEntity(pLevel) instanceof WaterAnimal waterAnimal) {
                 double d0 = (double)pPos.getX() + this.getRandomPositionOffset(pRandom);
                 double d1 = (double)pPos.getZ() + this.getRandomPositionOffset(pRandom);
                 int k = pRandom.nextInt(1, 361);
-                abstractFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
-                abstractFish.setPersistenceRequired();
-                pLevel.addFreshEntity(abstractFish);
+                waterAnimal.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
+                waterAnimal.setPersistenceRequired();
+                pLevel.addFreshEntity(waterAnimal);
             }
         }
     }
 
     protected UniformInt calculateHatchAmount(ServerLevel pLevel) {
-        if (this.fish != null) {
-            if (fish.create(pLevel) instanceof Cod) {
-                return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
-            } else if (fish.create(pLevel) instanceof Pufferfish) {
-                return UniformInt.of(LFLConfig.PUFFERFISH_HATCH_AMOUNT_MIN.get(), LFLConfig.PUFFERFISH_HATCH_AMOUNT_MAX.get());
-            } else if (fish.create(pLevel) instanceof Salmon) {
-                return UniformInt.of(LFLConfig.SALMON_HATCH_AMOUNT_MIN.get(), LFLConfig.SALMON_HATCH_AMOUNT_MAX.get());
-            } else if (fish.create(pLevel) instanceof TropicalFish) {
-                return UniformInt.of(LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MIN.get(), LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MAX.get());
-            }
-        }//FALLBACK
+        if (createEntity(pLevel) instanceof Cod) {
+            return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof Pufferfish) {
+            return UniformInt.of(LFLConfig.PUFFERFISH_HATCH_AMOUNT_MIN.get(), LFLConfig.PUFFERFISH_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof Salmon) {
+            return UniformInt.of(LFLConfig.SALMON_HATCH_AMOUNT_MIN.get(), LFLConfig.SALMON_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof TropicalFish) {
+            return UniformInt.of(LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MIN.get(), LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MAX.get());
+        }
+        //FALLBACK
         return UniformInt.of(0, 1);
     }
 
+    public Entity createEntity(Level pLevel) {
+        if (this.getFish() != null) {
+            return this.getFish().create(pLevel);
+        } else {
+            //Should never reach this
+            throw new NullPointerException("Failed to create Fish entity because the supplied entity type is null");
+        }
+    }
+
     protected double getRandomPositionOffset(RandomSource pRandom) {
-        double d0 = fish.getWidth() / 2.0F;
+        double d0 = getFish().getWidth() / 2.0F;
         return Mth.clamp(pRandom.nextDouble(), d0, 1.0D - d0);
     }
 
     public EntityType<?> getFish() {
-        return fish;
+        return fish.get();
     }
 
-    public void setFish(EntityType<?> fish) {
+    public void setFish(Supplier<EntityType<?>> fish) {
         this.fish = fish;
     }
 

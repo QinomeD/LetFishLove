@@ -7,10 +7,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.TropicalFish;
 
+import java.util.function.Supplier;
+
 public class TropicalFishRoeBlock extends RoeBlock {
     private TropicalFish.Pattern fishVariant;
 
-    public TropicalFishRoeBlock(EntityType<?> fish, Properties properties) {
+    public TropicalFishRoeBlock(Supplier<EntityType<?>> fish, Properties properties) {
         super(fish, properties);
     }
 
