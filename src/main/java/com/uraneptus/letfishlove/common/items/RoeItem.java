@@ -13,10 +13,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.function.Supplier;
+
 public class RoeItem extends PlaceOnWaterBlockItem {
 
-    public RoeItem(Block pBlock) {
-        super(pBlock, LFLProperties.roeItemProperties());
+    public RoeItem(Supplier<Block> pBlock) {
+        super(pBlock.get(), LFLProperties.roeItemProperties());
     }
 
     @Override

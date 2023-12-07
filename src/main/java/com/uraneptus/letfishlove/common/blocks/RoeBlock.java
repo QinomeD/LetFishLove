@@ -120,18 +120,26 @@ public class RoeBlock extends Block {
     }
 
     protected UniformInt calculateHatchAmount(ServerLevel pLevel) {
-        if (this.getFish() != null) {
-            if (getFish().create(pLevel) instanceof Cod) {
-                return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
-            } else if (getFish().create(pLevel) instanceof Pufferfish) {
-                return UniformInt.of(LFLConfig.PUFFERFISH_HATCH_AMOUNT_MIN.get(), LFLConfig.PUFFERFISH_HATCH_AMOUNT_MAX.get());
-            } else if (getFish().create(pLevel) instanceof Salmon) {
-                return UniformInt.of(LFLConfig.SALMON_HATCH_AMOUNT_MIN.get(), LFLConfig.SALMON_HATCH_AMOUNT_MAX.get());
-            } else if (getFish().create(pLevel) instanceof TropicalFish) {
-                return UniformInt.of(LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MIN.get(), LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MAX.get());
-            }
-        }//FALLBACK
+        if (createEntity(pLevel) instanceof Cod) {
+            return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof Pufferfish) {
+            return UniformInt.of(LFLConfig.PUFFERFISH_HATCH_AMOUNT_MIN.get(), LFLConfig.PUFFERFISH_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof Salmon) {
+            return UniformInt.of(LFLConfig.SALMON_HATCH_AMOUNT_MIN.get(), LFLConfig.SALMON_HATCH_AMOUNT_MAX.get());
+        } else if (createEntity(pLevel) instanceof TropicalFish) {
+            return UniformInt.of(LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MIN.get(), LFLConfig.TROPICAL_FISH_HATCH_AMOUNT_MAX.get());
+        }
+        //FALLBACK
         return UniformInt.of(0, 1);
+    }
+
+    public Entity createEntity(Level pLevel) {
+        if (this.getFish() != null) {
+            return this.getFish().create(pLevel);
+        } else {
+            //Should never reach this
+            throw new NullPointerException("Failed to create Fish entity because the supplied entity type is null");
+        }
     }
 
     protected double getRandomPositionOffset(RandomSource pRandom) {
