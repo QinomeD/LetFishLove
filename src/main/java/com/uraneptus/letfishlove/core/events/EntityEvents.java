@@ -62,8 +62,6 @@ public class EntityEvents {
             if (cap.getCanLoveCooldown() > 0) {
                 cap.setCanLoveCooldown(cap.getCanLoveCooldown() - 1, true);
             }
-            //System.out.println("Cooldown: " + cap.getCanLoveCooldown());
-            //System.out.println("Pregnant: " + cap.isPregnant());
         }
     }
 

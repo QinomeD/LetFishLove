@@ -1,7 +1,7 @@
 package com.uraneptus.letfishlove.common.entity;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
-import com.uraneptus.letfishlove.common.blocks.TropicalFishRoeBlock;
+import com.uraneptus.letfishlove.common.blocks.RoeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
@@ -60,10 +60,8 @@ public class FishLayRoeGoal extends MoveToBlockGoal {
                 entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
             }
 
-            Block roe = roeBlocks.get(entry);
-            if (fish instanceof TropicalFish tropicalFish && roe instanceof TropicalFishRoeBlock roeBlock) {
-                roeBlock.setFishVariant(tropicalFish.getVariant());
-            }
+            RoeBlock roe = (RoeBlock)roeBlocks.get(entry);
+            roe.setParentEntity(fish);
             level.setBlockAndUpdate(fishPos, roe.defaultBlockState());
         }
         FishBreedingUtil.getFishCap(fish).setPregnant(false, true);

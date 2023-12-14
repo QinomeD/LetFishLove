@@ -2,6 +2,7 @@ package com.uraneptus.letfishlove.common.blocks;
 
 import com.uraneptus.letfishlove.LFLConfig;
 import com.uraneptus.letfishlove.LetFishLoveMod;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +37,8 @@ import java.util.stream.Collectors;
 
 public class RoeBlock extends Block {
     private Supplier<EntityType<?>> fish;
-    private UniformInt hatchAmount;
+    protected boolean fromBreeding = false;
+    private Entity parentEntity;
 
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.5D, 16.0D);
 
@@ -114,11 +116,19 @@ public class RoeBlock extends Block {
                 int k = pRandom.nextInt(1, 361);
                 waterAnimal.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
                 waterAnimal.setPersistenceRequired();
+                if (waterAnimal instanceof TropicalFish newtropicalFish) {
+                    if (fromBreeding && this.getParentEntity() instanceof TropicalFish parentFish) {
+                        newtropicalFish.setVariant(parentFish.getVariant());
+                    } else {
+                        newtropicalFish.setVariant(Util.getRandom(TropicalFish.COMMON_VARIANTS, pRandom));
+                    }
+                }
                 pLevel.addFreshEntity(waterAnimal);
             }
         }
     }
 
+    //TODO need to find a better way for this
     protected UniformInt calculateHatchAmount(ServerLevel pLevel) {
         if (createEntity(pLevel) instanceof Cod) {
             return UniformInt.of(LFLConfig.COD_HATCH_AMOUNT_MIN.get(), LFLConfig.COD_HATCH_AMOUNT_MAX.get());
@@ -155,12 +165,13 @@ public class RoeBlock extends Block {
         this.fish = fish;
     }
 
-    public UniformInt getHatchAmount() {
-        return hatchAmount;
+    public Entity getParentEntity() {
+        return parentEntity;
     }
 
-    public void setHatchAmount(UniformInt hatchAmount) {
-        this.hatchAmount = hatchAmount;
+    public void setParentEntity(Entity parentEntity) {
+        this.parentEntity = parentEntity;
+        this.fromBreeding = true;
     }
 
     public static Iterable<Block> getAllBlocks() {

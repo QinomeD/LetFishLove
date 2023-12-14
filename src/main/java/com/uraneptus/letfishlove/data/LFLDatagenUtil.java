@@ -38,12 +38,4 @@ public class LFLDatagenUtil {
         return new ResourceLocation(ModelProvider.ITEM_FOLDER + "/" + path);
     }
 
-    public static ResourceLocation craftingPath(String name) {
-        return LetFishLoveMod.modPrefix("crafting/" + name);
-    }
-
-    public static ResourceLocation cookingPath(String name) {
-        return LetFishLoveMod.modPrefix("cooking/" + name);
-    }
-
 }

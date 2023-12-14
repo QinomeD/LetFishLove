@@ -68,15 +68,6 @@ public class LetFishLoveMod {
         generator.addProvider(includeServer, new LFLItemTagsProvider(generator, blockTagsProvider, fileHelper));
         generator.addProvider(includeServer, new LFLEntityTagsProvider(generator, fileHelper));
         generator.addProvider(includeServer, new LFLLootTableProvider(generator));
-
-        /*
-        SeasonalsBlockTagsProvider blockTagsProvider = new SeasonalsBlockTagsProvider(generator, fileHelper);
-        generator.addProvider(includeServer, blockTagsProvider);
-        generator.addProvider(includeServer, new SeasonalsItemTagsProvider(generator, blockTagsProvider, fileHelper));
-        generator.addProvider(includeServer, new SeasonalsAdvancementModifierProvider(generator));
-        generator.addProvider(includeServer, new SeasonalsLootModifierProvider(generator));
-        generator.addProvider(includeServer, new SeasonalsRecipeProvider(generator));
-         */
     }
 
 }
