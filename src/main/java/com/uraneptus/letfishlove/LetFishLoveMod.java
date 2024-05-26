@@ -61,7 +61,7 @@ public class LetFishLoveMod {
 
         generator.addProvider(includeClient, new LFLBlockStateProvider(generator, fileHelper));
         generator.addProvider(includeClient, new LFLItemModelProvider(generator, fileHelper));
-        generator.addProvider(includeClient, new LFLLangProvider(generator));
+        generator.addProvider(includeClient, new LFLLangProvider(generator, LetFishLoveMod.MOD_ID));
 
         LFLBlockTagsProvider blockTagsProvider = new LFLBlockTagsProvider(generator, fileHelper);
         generator.addProvider(includeServer, blockTagsProvider);

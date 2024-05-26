@@ -62,7 +62,7 @@ public class RoeBlock extends Block {
         pLevel.scheduleTick(pPos, this, getHatchDelay(pLevel.getRandom()));
     }
 
-    private static int getHatchDelay(RandomSource pRandom) {
+    protected static int getHatchDelay(RandomSource pRandom) {
         if (!FMLEnvironment.production) {
             return pRandom.nextInt(36, 120);
         }
@@ -90,13 +90,13 @@ public class RoeBlock extends Block {
         }
     }
 
-    private static boolean mayPlaceOn(BlockGetter pLevel, BlockPos pPos) {
+    protected static boolean mayPlaceOn(BlockGetter pLevel, BlockPos pPos) {
         FluidState fluidstate = pLevel.getFluidState(pPos);
         FluidState fluidstate1 = pLevel.getFluidState(pPos.above());
         return fluidstate.getType() == Fluids.WATER && fluidstate1.getType() == Fluids.EMPTY;
     }
 
-    private void hatch(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    protected void hatch(ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         this.destroyBlock(pLevel, pPos);
         pLevel.playSound(null, pPos, SoundEvents.FROGSPAWN_HATCH, SoundSource.BLOCKS, 1.0F, 1.0F);
         this.spawnFish(pLevel, pPos, pRandom);
@@ -143,7 +143,7 @@ public class RoeBlock extends Block {
         return UniformInt.of(0, 1);
     }
 
-    public Entity createEntity(Level pLevel) {
+    protected Entity createEntity(Level pLevel) {
         if (this.getFish() != null) {
             return this.getFish().create(pLevel);
         } else {
@@ -172,9 +172,5 @@ public class RoeBlock extends Block {
     public void setParentEntity(Entity parentEntity) {
         this.parentEntity = parentEntity;
         this.fromBreeding = true;
-    }
-
-    public static Iterable<Block> getAllBlocks() {
-        return ForgeRegistries.BLOCKS.getValues().stream().filter((block) -> ForgeRegistries.BLOCKS.getKey(block) != null && LetFishLoveMod.MOD_ID.equals(ForgeRegistries.BLOCKS.getKey(block).getNamespace()) && block instanceof RoeBlock).collect(Collectors.toList());
     }
 }

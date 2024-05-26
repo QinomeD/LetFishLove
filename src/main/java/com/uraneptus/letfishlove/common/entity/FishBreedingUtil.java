@@ -54,8 +54,6 @@ public class FishBreedingUtil {
         }
 
         if (serverplayer != null) {
-            //Usually a trigger would be here
-            //TODO figure out how to trigger this
             serverplayer.awardStat(Stats.ANIMALS_BRED);
         }
 

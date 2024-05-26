@@ -3,20 +3,36 @@ package com.uraneptus.letfishlove.data.client;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class LFLLangProvider extends LanguageProvider {
-    public LFLLangProvider(DataGenerator gen) {
-        super(gen, LetFishLoveMod.MOD_ID, "en_us");
+    public LFLLangProvider(DataGenerator gen, String modId) {
+        super(gen, modId, "en_us");
     }
 
     @Override
     protected void addTranslations() {
-        addBlock(LFLBlocks.COD_ROE_BLOCK, "Cod Roe");
-        addBlock(LFLBlocks.PUFFERFISH_ROE_BLOCK, "Pufferfish Roe");
-        addBlock(LFLBlocks.SALMON_ROE_BLOCK, "Salmon Roe");
-        addBlock(LFLBlocks.TROPICAL_FISH_ROE_BLOCK, "Tropical Fish Roe");
+        LFLBlocks.BLOCKS.getEntries().forEach(this::forBlock);
+    }
 
+    public void forBlock(Supplier<? extends Block> block) {
+        addBlock(block, createTranslation(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
+    }
 
+    public static String createTranslation(String path) {
+        final StringBuilder builder = new StringBuilder();
+
+        for (String part : path.split("_")) {
+            if (!builder.isEmpty()) {
+                builder.append(" ");
+            }
+            builder.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        }
+        return builder.toString();
     }
 }

@@ -21,10 +21,7 @@ public class LFLItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(LFLItems.COD_ROE);
-        basicItem(LFLItems.PUFFERFISH_ROE);
-        basicItem(LFLItems.SALMON_ROE);
-        basicItem(LFLItems.TROPICAL_FISH_ROE);
+        LFLItems.ITEMS.getEntries().forEach(this::basicItem);
     }
 
     private void basicItem(Supplier<? extends Item> item) {

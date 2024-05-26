@@ -41,7 +41,7 @@ public class LFLLootTableProvider extends LootTableProvider {
 
         @Override
         protected void addTables() {
-            RoeBlock.getAllBlocks().forEach(this::dropSelf);
+            LFLBlocks.BLOCKS.getEntries().forEach(block -> dropSelf(block.get()));
         }
 
         @Override

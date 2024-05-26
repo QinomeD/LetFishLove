@@ -18,7 +18,7 @@ public class LFLBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     public void addTags() {
-        RoeBlock.getAllBlocks().forEach(block -> tag(BlockTags.MINEABLE_WITH_SHOVEL).add(block));
+        LFLBlocks.BLOCKS.getEntries().forEach(block -> tag(BlockTags.MINEABLE_WITH_SHOVEL).add(block.get()));
 
         tag(LFLBlockTags.COD).add(LFLBlocks.COD_ROE_BLOCK.get());
         tag(LFLBlockTags.SALMON).add(LFLBlocks.SALMON_ROE_BLOCK.get());
