@@ -10,7 +10,7 @@ import net.minecraft.world.entity.animal.TropicalFish;
 import java.util.function.Supplier;
 
 public class TropicalFishRoeBlock extends RoeBlock {
-    private TropicalFish.Pattern fishVariant;
+    private int fishVariant = 0;
 
     public TropicalFishRoeBlock(Supplier<EntityType<?>> fish, Properties properties) {
         super(fish, properties);
@@ -27,10 +27,10 @@ public class TropicalFishRoeBlock extends RoeBlock {
                 int k = pRandom.nextInt(1, 361);
                 tropicalFish.moveTo(d0, (double)pPos.getY() - 0.5D, d1, (float)k, 0.0F);
                 tropicalFish.setPersistenceRequired();
-                if (this.getFishVariant() == null) {
+                if (this.getFishVariant() == 0) {
                     setRandomVariant(tropicalFish, pRandom);
                 } else {
-                    tropicalFish.setVariant(this.getFishVariant());
+                    tropicalFish.setPackedVariant(this.getFishVariant());
                 }
 
                 pLevel.addFreshEntity(tropicalFish);
@@ -44,11 +44,11 @@ public class TropicalFishRoeBlock extends RoeBlock {
         tropicalFish.setPackedVariant(TropicalFish.packVariant(TropicalFish.getPattern(variantId), TropicalFish.getBaseColor(variantId), TropicalFish.getPatternColor(variantId)));
     }
 
-    public TropicalFish.Pattern getFishVariant() {
+    public int getFishVariant() {
         return this.fishVariant;
     }
 
-    public void setFishVariant(TropicalFish.Pattern variant) {
+    public void setFishVariant(int variant) {
         this.fishVariant = variant;
     }
 }

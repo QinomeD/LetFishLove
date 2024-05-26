@@ -61,9 +61,11 @@ public class FishLayRoeGoal extends MoveToBlockGoal {
 
             Block roe = roeBlocks.get(entry);
             if (fish instanceof TropicalFish tropicalFish && roe instanceof TropicalFishRoeBlock roeBlock) {
-                roeBlock.setFishVariant(tropicalFish.getVariant());
+                roeBlock.setFishVariant(tropicalFish.getPackedVariant());
+                level.setBlockAndUpdate(fishPos, roeBlock.defaultBlockState());
+            } else {
+                level.setBlockAndUpdate(fishPos, roe.defaultBlockState());
             }
-            level.setBlockAndUpdate(fishPos, roe.defaultBlockState());
         }
         FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
     }
