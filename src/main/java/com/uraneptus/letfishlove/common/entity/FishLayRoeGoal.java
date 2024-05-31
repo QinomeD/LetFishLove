@@ -50,20 +50,21 @@ public class FishLayRoeGoal extends MoveToBlockGoal {
     public void stop() {
         Level level = this.fish.getLevel();
         BlockPos fishPos = this.getMoveToTarget();
-        String fishTypeName = ForgeRegistries.ENTITY_TYPES.getKey(fish.getType()).getPath();
-        TagKey<Block> blockTag = TagKey.create(Registry.BLOCK_REGISTRY, LetFishLoveMod.modPrefix("fish_roe/" + fishTypeName));
-        List<Block> roeBlocks = ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
-        if (!roeBlocks.isEmpty()) {
-            int entry = 0;
-            if (roeBlocks.size() > 1) {
-                entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
-            }
+        TagKey<Block> blockTag = FishBreedingUtil.getRoeBlock(fish.getType());
+        if (blockTag != null) {
+            List<Block> roeBlocks = ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
+            if (!roeBlocks.isEmpty()) {
+                int entry = 0;
+                if (roeBlocks.size() > 1) {
+                    entry = level.getRandom().nextIntBetweenInclusive(0, roeBlocks.size() - 1);
+                }
 
-            RoeBlock roe = (RoeBlock)roeBlocks.get(entry);
-            roe.setParentEntity(fish);
-            level.setBlockAndUpdate(fishPos, roe.defaultBlockState());
+                RoeBlock roe = (RoeBlock)roeBlocks.get(entry);
+                roe.setParentEntity(fish);
+                level.setBlockAndUpdate(fishPos, roe.defaultBlockState());
+            }
+            FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
         }
-        FishBreedingUtil.getFishCap(fish).setPregnant(false, true);
     }
 
 }
