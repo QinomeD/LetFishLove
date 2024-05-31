@@ -1,7 +1,6 @@
 package com.uraneptus.letfishlove.data.client;
 
 import com.uraneptus.letfishlove.LetFishLoveMod;
-import com.uraneptus.letfishlove.common.blocks.RoeBlock;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;

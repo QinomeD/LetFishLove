@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 @Mod.EventBusSubscriber(modid = LetFishLoveMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LetFishLoveMod {
     public static final String MOD_ID = "letfishlove";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static ResourceLocation modPrefix(String path) {
         return new ResourceLocation(LetFishLoveMod.MOD_ID, path);
     }

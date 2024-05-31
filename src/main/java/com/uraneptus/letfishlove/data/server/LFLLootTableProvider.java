@@ -2,7 +2,6 @@ package com.uraneptus.letfishlove.data.server;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import com.uraneptus.letfishlove.common.blocks.RoeBlock;
 import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;

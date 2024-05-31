@@ -1,6 +1,5 @@
 package com.uraneptus.letfishlove;
 
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class LFLConfig {

@@ -1,19 +1,13 @@
 package com.uraneptus.letfishlove.core.registry;
 
-import com.uraneptus.letfishlove.LFLConfig;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.common.blocks.RoeBlock;
 import com.uraneptus.letfishlove.core.other.LFLProperties;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class LFLBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, LetFishLoveMod.MOD_ID);

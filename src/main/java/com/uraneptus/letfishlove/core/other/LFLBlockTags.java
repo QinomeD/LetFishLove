@@ -3,7 +3,6 @@ package com.uraneptus.letfishlove.core.other;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public class LFLBlockTags {
