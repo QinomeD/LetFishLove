@@ -74,9 +74,9 @@ public class LFLEntityEvents {
         if (entity instanceof WaterAnimal fish && FishBreedingUtil.isBreedable(fish)) {
             TagKey<Item> temptationItems = FishBreedingUtil.getTemptationItems(fish.getType());
             if (temptationItems != null) {
-                fish.goalSelector.addGoal(2, new TemptGoal(fish, 1.2D, Ingredient.of(temptationItems), false));
-                fish.goalSelector.addGoal(3, new FishBreedGoal(fish, 1.0D));
-                fish.goalSelector.addGoal(3, new FishLayRoeGoal(fish));
+                fish.goalSelector.addGoal(0, new TemptGoal(fish, 1.2D, Ingredient.of(temptationItems), false));
+                fish.goalSelector.addGoal(0, new FishBreedGoal(fish, 1.0D));
+                fish.goalSelector.addGoal(0, new FishLayRoeGoal(fish));
             }
         }
     }
