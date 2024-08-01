@@ -1,5 +1,7 @@
 package com.uraneptus.letfishlove.data.server.tags;
 
+import com.starfish_studios.naturalist.registry.NaturalistEntityTypes;
+import com.teamabnormals.upgrade_aquatic.core.registry.UAEntityTypes;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.other.LFLEntityTags;
 import net.minecraft.data.DataGenerator;
@@ -16,6 +18,9 @@ public class LFLEntityTagsProvider extends EntityTypeTagsProvider {
 
     @Override
     public void addTags() {
-        tag(LFLEntityTags.BREEDABLE_FISH).add(EntityType.COD, EntityType.SALMON, EntityType.PUFFERFISH, EntityType.TROPICAL_FISH);
+        tag(LFLEntityTags.BREEDABLE_FISH)
+                .add(EntityType.COD, EntityType.SALMON, EntityType.PUFFERFISH, EntityType.TROPICAL_FISH)
+                .add(UAEntityTypes.PIKE.get(), UAEntityTypes.PERCH.get(), UAEntityTypes.LIONFISH.get())
+                .add(NaturalistEntityTypes.BASS.get(), NaturalistEntityTypes.CATFISH.get());
     }
 }

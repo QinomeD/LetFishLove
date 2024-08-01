@@ -3,6 +3,11 @@
     "letfishlove:cod_roe_block",
     "letfishlove:pufferfish_roe_block",
     "letfishlove:salmon_roe_block",
-    "letfishlove:tropical_fish_roe_block"
+    "letfishlove:tropical_fish_roe_block",
+    "letfishlove:pike_roe_block",
+    "letfishlove:perch_roe_block",
+    "letfishlove:lionfish_roe_block",
+    "letfishlove:bass_roe_block",
+    "letfishlove:catfish_roe_block"
   ]
 }

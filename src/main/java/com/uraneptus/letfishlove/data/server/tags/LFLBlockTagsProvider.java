@@ -23,6 +23,10 @@ public class LFLBlockTagsProvider extends BlockTagsProvider {
         tag(LFLBlockTags.SALMON).add(LFLBlocks.SALMON_ROE_BLOCK.get());
         tag(LFLBlockTags.PUFFERFISH).add(LFLBlocks.PUFFERFISH_ROE_BLOCK.get());
         tag(LFLBlockTags.TROPICAL_FISH).add(LFLBlocks.TROPICAL_FISH_ROE_BLOCK.get());
-
+        tag(LFLBlockTags.PIKE).add(LFLBlocks.PIKE_ROE_BLOCK.get());
+        tag(LFLBlockTags.PERCH).add(LFLBlocks.PERCH_ROE_BLOCK.get());
+        tag(LFLBlockTags.LIONFISH).add(LFLBlocks.LIONFISH_ROE_BLOCK.get());
+        tag(LFLBlockTags.BASS).add(LFLBlocks.BASS_ROE_BLOCK.get());
+        tag(LFLBlockTags.CATFISH).add(LFLBlocks.CATFISH_ROE_BLOCK.get());
     }
 }

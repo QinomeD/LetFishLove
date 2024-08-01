@@ -20,5 +20,10 @@ public class LFLItemTagsProvider extends ItemTagsProvider {
         tag(LFLItemTags.SALMON).add(Items.SWEET_BERRIES);
         tag(LFLItemTags.PUFFERFISH).add(Items.GOLDEN_CARROT);
         tag(LFLItemTags.TROPICAL_FISH).add(Items.MELON_SLICE);
+        tag(LFLItemTags.PIKE).add(Items.SALMON);
+        tag(LFLItemTags.PERCH).add(Items.COD);
+        tag(LFLItemTags.LIONFISH).add(Items.TROPICAL_FISH);
+        tag(LFLItemTags.BASS).add(Items.POTATO);
+        tag(LFLItemTags.CATFISH).add(Items.SEAGRASS);
     }
 }

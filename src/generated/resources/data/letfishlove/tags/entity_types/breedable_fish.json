@@ -3,6 +3,11 @@
     "minecraft:cod",
     "minecraft:salmon",
     "minecraft:pufferfish",
-    "minecraft:tropical_fish"
+    "minecraft:tropical_fish",
+    "upgrade_aquatic:pike",
+    "upgrade_aquatic:perch",
+    "upgrade_aquatic:lionfish",
+    "naturalist:bass",
+    "naturalist:catfish"
   ]
 }
