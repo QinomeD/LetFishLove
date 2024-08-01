@@ -1,5 +1,7 @@
 package com.uraneptus.letfishlove.common.blocks;
 
+import com.teamabnormals.upgrade_aquatic.common.entity.animal.Pike;
+import com.teamabnormals.upgrade_aquatic.common.entity.animal.PikeType;
 import com.uraneptus.letfishlove.common.RoeHatchDataReloadListener;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -119,6 +121,15 @@ public class RoeBlock extends Block {
     }
 
     protected void handleVariantFish(WaterAnimal waterAnimal, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (waterAnimal instanceof Pike pike) {
+            if (fromBreeding && this.getParentEntity() instanceof Pike parentFish) {
+                pike.setPikeType(parentFish.getPikeType());
+            } else {
+                pike.setPikeType(PikeType.getRandom(pLevel.getRandom(), pLevel.getBiome(pPos), false));
+            }
+            return;
+        }
+
         if (waterAnimal instanceof TropicalFish newtropicalFish) {
             if (fromBreeding && this.getParentEntity() instanceof TropicalFish parentFish) {
                 newtropicalFish.setVariant(parentFish.getVariant());
