@@ -28,5 +28,6 @@ public class LFLBlockTagsProvider extends BlockTagsProvider {
         tag(LFLBlockTags.LIONFISH).add(LFLBlocks.LIONFISH_ROE_BLOCK.get());
         tag(LFLBlockTags.BASS).add(LFLBlocks.BASS_ROE_BLOCK.get());
         tag(LFLBlockTags.CATFISH).add(LFLBlocks.CATFISH_ROE_BLOCK.get());
+        tag(LFLBlockTags.KOI).add(LFLBlocks.KOI_ROE_BLOCK.get());
     }
 }

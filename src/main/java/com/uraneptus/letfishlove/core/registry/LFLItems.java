@@ -38,4 +38,9 @@ public class LFLItems {
             () -> ModList.get().isLoaded("naturalist")
                     ? new RoeItem(LFLBlocks.CATFISH_ROE_BLOCK)
                     : new Item(LFLProperties.roeItemProperties()));
+
+    public static final RegistryObject<Item> KOI_ROE = ITEMS.register("koi_roe",
+            () -> ModList.get().isLoaded("environmental")
+                    ? new RoeItem(LFLBlocks.KOI_ROE_BLOCK)
+                    : new Item(LFLProperties.roeItemProperties()));
 }

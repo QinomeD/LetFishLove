@@ -15,6 +15,7 @@ public class LFLBlockTags {
     public static final TagKey<Block> LIONFISH = create("upgrade_aquatic", "lionfish");
     public static final TagKey<Block> BASS = create("naturalist", "bass");
     public static final TagKey<Block> CATFISH = create("naturalist", "catfish");
+    public static final TagKey<Block> KOI = create("environmental", "koi");
 
     public static TagKey<Block> create(String fishName) {
         return create("minecraft", fishName);

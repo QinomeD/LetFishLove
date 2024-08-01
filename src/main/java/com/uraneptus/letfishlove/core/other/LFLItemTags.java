@@ -4,7 +4,6 @@ import com.uraneptus.letfishlove.LetFishLoveMod;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 
 public class LFLItemTags {
     public static final TagKey<Item> COD = create("cod");
@@ -16,7 +15,7 @@ public class LFLItemTags {
     public static final TagKey<Item> LIONFISH = create("upgrade_aquatic", "lionfish");
     public static final TagKey<Item> BASS = create("naturalist", "bass");
     public static final TagKey<Item> CATFISH = create("naturalist", "catfish");
-
+    public static final TagKey<Item> KOI = create("environmental", "koi");
 
     public static TagKey<Item> create(String fishName) {
         return create("minecraft", fishName);

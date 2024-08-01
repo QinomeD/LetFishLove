@@ -1,6 +1,7 @@
 package com.uraneptus.letfishlove.core.registry;
 
 import com.starfish_studios.naturalist.registry.NaturalistEntityTypes;
+import com.teamabnormals.environmental.core.registry.EnvironmentalEntityTypes;
 import com.teamabnormals.upgrade_aquatic.core.registry.UAEntityTypes;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.common.blocks.RoeBlock;
@@ -44,5 +45,11 @@ public class LFLBlocks {
     public static final RegistryObject<Block> CATFISH_ROE_BLOCK = BLOCKS.register("catfish_roe_block",
             () -> ModList.get().isLoaded("naturalist")
                     ? new RoeBlock(NaturalistEntityTypes.CATFISH::get, LFLProperties.roeBlockProperties())
+                    : new Block(LFLProperties.roeBlockProperties()));
+
+
+    public static final RegistryObject<Block> KOI_ROE_BLOCK = BLOCKS.register("koi_roe_block",
+            () -> ModList.get().isLoaded("environmental")
+                    ? new RoeBlock(EnvironmentalEntityTypes.KOI::get, LFLProperties.roeBlockProperties())
                     : new Block(LFLProperties.roeBlockProperties()));
 }

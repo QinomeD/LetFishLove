@@ -1,5 +1,7 @@
 package com.uraneptus.letfishlove.common.blocks;
 
+import com.teamabnormals.environmental.common.entity.animal.koi.Koi;
+import com.teamabnormals.environmental.common.entity.animal.koi.KoiBreed;
 import com.teamabnormals.upgrade_aquatic.common.entity.animal.Pike;
 import com.teamabnormals.upgrade_aquatic.common.entity.animal.PikeType;
 import com.uraneptus.letfishlove.common.RoeHatchDataReloadListener;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -121,11 +124,20 @@ public class RoeBlock extends Block {
     }
 
     protected void handleVariantFish(WaterAnimal waterAnimal, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (waterAnimal instanceof Pike pike) {
+        if (ModList.get().isLoaded("upgrade_aquatic") && waterAnimal instanceof Pike pike) {
             if (fromBreeding && this.getParentEntity() instanceof Pike parentFish) {
                 pike.setPikeType(parentFish.getPikeType());
             } else {
                 pike.setPikeType(PikeType.getRandom(pLevel.getRandom(), pLevel.getBiome(pPos), false));
+            }
+            return;
+        }
+
+        if (ModList.get().isLoaded("environmental") && waterAnimal instanceof Koi koi) {
+            if (fromBreeding && this.getParentEntity() instanceof Koi parentFish) {
+                koi.setVariant(parentFish.getVariant());
+            } else {
+                koi.setVariant(Util.getRandom(KoiBreed.values(), pRandom).getId());
             }
             return;
         }

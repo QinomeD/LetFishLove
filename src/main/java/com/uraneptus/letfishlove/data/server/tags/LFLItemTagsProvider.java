@@ -1,5 +1,6 @@
 package com.uraneptus.letfishlove.data.server.tags;
 
+import com.teamabnormals.environmental.core.registry.EnvironmentalItems;
 import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.other.LFLItemTags;
 import net.minecraft.data.DataGenerator;
@@ -25,5 +26,6 @@ public class LFLItemTagsProvider extends ItemTagsProvider {
         tag(LFLItemTags.LIONFISH).add(Items.TROPICAL_FISH);
         tag(LFLItemTags.BASS).add(Items.POTATO);
         tag(LFLItemTags.CATFISH).add(Items.SEAGRASS);
+        tag(LFLItemTags.KOI).add(EnvironmentalItems.CHERRIES.get());
     }
 }

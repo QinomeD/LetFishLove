@@ -104,6 +104,7 @@ dependencies {
     implementation fg.deobf("curse.maven:blueprint-382216:4749000")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:naturalist-627986:4847008")
+    implementation fg.deobf("curse.maven:environmental-388992:5292368")
     shade fg.deobf("dev._100media.capabilitysyncer:capabilitysyncer:1.19-3.1.2")
 }
 
