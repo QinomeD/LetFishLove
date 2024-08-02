@@ -6,7 +6,10 @@ import com.uraneptus.letfishlove.core.registry.LFLBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class LFLBlockTagsProvider extends BlockTagsProvider {
@@ -23,11 +26,15 @@ public class LFLBlockTagsProvider extends BlockTagsProvider {
         tag(LFLBlockTags.SALMON).add(LFLBlocks.SALMON_ROE_BLOCK.get());
         tag(LFLBlockTags.PUFFERFISH).add(LFLBlocks.PUFFERFISH_ROE_BLOCK.get());
         tag(LFLBlockTags.TROPICAL_FISH).add(LFLBlocks.TROPICAL_FISH_ROE_BLOCK.get());
-        tag(LFLBlockTags.PIKE).add(LFLBlocks.PIKE_ROE_BLOCK.get());
-        tag(LFLBlockTags.PERCH).add(LFLBlocks.PERCH_ROE_BLOCK.get());
-        tag(LFLBlockTags.LIONFISH).add(LFLBlocks.LIONFISH_ROE_BLOCK.get());
-        tag(LFLBlockTags.BASS).add(LFLBlocks.BASS_ROE_BLOCK.get());
-        tag(LFLBlockTags.CATFISH).add(LFLBlocks.CATFISH_ROE_BLOCK.get());
-        tag(LFLBlockTags.KOI).add(LFLBlocks.KOI_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.PIKE, LFLBlocks.PIKE_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.PERCH, LFLBlocks.PERCH_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.LIONFISH, LFLBlocks.LIONFISH_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.BASS, LFLBlocks.BASS_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.CATFISH, LFLBlocks.CATFISH_ROE_BLOCK.get());
+        addOptional(LFLBlockTags.KOI, LFLBlocks.KOI_ROE_BLOCK.get());
+    }
+
+    private void addOptional(TagKey<Block> tagKey, Block block) {
+        tag(tagKey).addOptional(ForgeRegistries.BLOCKS.getKey(block));
     }
 }

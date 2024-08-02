@@ -1,5 +1,8 @@
 {
   "values": [
-    "letfishlove:bass_roe_block"
+    {
+      "id": "letfishlove:bass_roe_block",
+      "required": false
+    }
   ]
 }

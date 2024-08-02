@@ -1,5 +1,8 @@
 {
   "values": [
-    "letfishlove:catfish_roe_block"
+    {
+      "id": "letfishlove:catfish_roe_block",
+      "required": false
+    }
   ]
 }

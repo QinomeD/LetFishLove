@@ -1,5 +1,8 @@
 {
   "values": [
-    "letfishlove:lionfish_roe_block"
+    {
+      "id": "letfishlove:lionfish_roe_block",
+      "required": false
+    }
   ]
 }

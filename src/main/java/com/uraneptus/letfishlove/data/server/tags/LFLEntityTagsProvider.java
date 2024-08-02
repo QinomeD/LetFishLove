@@ -7,8 +7,10 @@ import com.uraneptus.letfishlove.LetFishLoveMod;
 import com.uraneptus.letfishlove.core.other.LFLEntityTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class LFLEntityTagsProvider extends EntityTypeTagsProvider {
@@ -19,10 +21,17 @@ public class LFLEntityTagsProvider extends EntityTypeTagsProvider {
 
     @Override
     public void addTags() {
-        tag(LFLEntityTags.BREEDABLE_FISH)
-                .add(EntityType.COD, EntityType.SALMON, EntityType.PUFFERFISH, EntityType.TROPICAL_FISH)
-                .add(UAEntityTypes.PIKE.get(), UAEntityTypes.PERCH.get(), UAEntityTypes.LIONFISH.get())
-                .add(NaturalistEntityTypes.BASS.get(), NaturalistEntityTypes.CATFISH.get())
-                .add(EnvironmentalEntityTypes.KOI.get());
+        tag(LFLEntityTags.BREEDABLE_FISH).add(EntityType.COD, EntityType.SALMON, EntityType.PUFFERFISH, EntityType.TROPICAL_FISH);
+
+        addOptional(LFLEntityTags.BREEDABLE_FISH,
+                UAEntityTypes.PIKE.get(), UAEntityTypes.PERCH.get(), UAEntityTypes.LIONFISH.get(),
+                NaturalistEntityTypes.BASS.get(), NaturalistEntityTypes.CATFISH.get(),
+                EnvironmentalEntityTypes.KOI.get());
+    }
+
+    private void addOptional(TagKey<EntityType<?>> tagKey, EntityType<?>... fish) {
+        for (var singularFish : fish) {
+            tag(tagKey).addOptional(ForgeRegistries.ENTITY_TYPES.getKey(singularFish));
+        }
     }
 }

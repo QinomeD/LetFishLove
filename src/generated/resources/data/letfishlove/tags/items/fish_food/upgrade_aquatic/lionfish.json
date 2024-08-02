@@ -1,5 +1,8 @@
 {
   "values": [
-    "minecraft:tropical_fish"
+    {
+      "id": "minecraft:tropical_fish",
+      "required": false
+    }
   ]
 }

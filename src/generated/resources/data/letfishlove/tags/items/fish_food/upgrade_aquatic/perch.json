@@ -1,5 +1,8 @@
 {
   "values": [
-    "minecraft:cod"
+    {
+      "id": "minecraft:cod",
+      "required": false
+    }
   ]
 }

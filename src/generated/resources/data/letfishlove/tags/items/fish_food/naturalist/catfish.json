@@ -1,5 +1,8 @@
 {
   "values": [
-    "minecraft:seagrass"
+    {
+      "id": "minecraft:seagrass",
+      "required": false
+    }
   ]
 }

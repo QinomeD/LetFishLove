@@ -99,7 +99,7 @@ configurations {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    implementation(fg.deobf("curse.maven:farmersdelight-398521:3999157"))
+    implementation fg.deobf("curse.maven:farmersdelight-398521:3999157")
     implementation fg.deobf("curse.maven:upgrade-aquatic-326895:4777515")
     implementation fg.deobf("curse.maven:blueprint-382216:4749000")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")

@@ -4,11 +4,29 @@
     "minecraft:salmon",
     "minecraft:pufferfish",
     "minecraft:tropical_fish",
-    "upgrade_aquatic:pike",
-    "upgrade_aquatic:perch",
-    "upgrade_aquatic:lionfish",
-    "naturalist:bass",
-    "naturalist:catfish",
-    "environmental:koi"
+    {
+      "id": "upgrade_aquatic:pike",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:perch",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:lionfish",
+      "required": false
+    },
+    {
+      "id": "naturalist:bass",
+      "required": false
+    },
+    {
+      "id": "naturalist:catfish",
+      "required": false
+    },
+    {
+      "id": "environmental:koi",
+      "required": false
+    }
   ]
 }

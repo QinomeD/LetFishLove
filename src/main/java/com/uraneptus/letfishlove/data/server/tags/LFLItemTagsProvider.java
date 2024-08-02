@@ -6,8 +6,11 @@ import com.uraneptus.letfishlove.core.other.LFLItemTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class LFLItemTagsProvider extends ItemTagsProvider {
@@ -21,11 +24,15 @@ public class LFLItemTagsProvider extends ItemTagsProvider {
         tag(LFLItemTags.SALMON).add(Items.SWEET_BERRIES);
         tag(LFLItemTags.PUFFERFISH).add(Items.GOLDEN_CARROT);
         tag(LFLItemTags.TROPICAL_FISH).add(Items.MELON_SLICE);
-        tag(LFLItemTags.PIKE).add(Items.SALMON);
-        tag(LFLItemTags.PERCH).add(Items.COD);
-        tag(LFLItemTags.LIONFISH).add(Items.TROPICAL_FISH);
-        tag(LFLItemTags.BASS).add(Items.POTATO);
-        tag(LFLItemTags.CATFISH).add(Items.SEAGRASS);
-        tag(LFLItemTags.KOI).add(EnvironmentalItems.CHERRIES.get());
+        addOptional(LFLItemTags.PIKE, Items.SALMON);
+        addOptional(LFLItemTags.PERCH, Items.COD);
+        addOptional(LFLItemTags.LIONFISH, Items.TROPICAL_FISH);
+        addOptional(LFLItemTags.BASS, Items.POTATO);
+        addOptional(LFLItemTags.CATFISH, Items.SEAGRASS);
+        addOptional(LFLItemTags.KOI, EnvironmentalItems.CHERRIES.get());
+    }
+
+    private void addOptional(TagKey<Item> tagKey, Item item) {
+        tag(tagKey).addOptional(ForgeRegistries.ITEMS.getKey(item));
     }
 }

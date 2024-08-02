@@ -1,5 +1,8 @@
 {
   "values": [
-    "letfishlove:pike_roe_block"
+    {
+      "id": "letfishlove:pike_roe_block",
+      "required": false
+    }
   ]
 }

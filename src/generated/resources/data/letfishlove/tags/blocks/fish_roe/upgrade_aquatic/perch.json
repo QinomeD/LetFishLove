@@ -1,5 +1,8 @@
 {
   "values": [
-    "letfishlove:perch_roe_block"
+    {
+      "id": "letfishlove:perch_roe_block",
+      "required": false
+    }
   ]
 }

@@ -1,5 +1,8 @@
 {
   "values": [
-    "environmental:cherries"
+    {
+      "id": "environmental:cherries",
+      "required": false
+    }
   ]
 }
